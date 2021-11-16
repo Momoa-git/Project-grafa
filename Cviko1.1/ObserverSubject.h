@@ -7,7 +7,7 @@
 class ObserverSubject {
 public:
 	virtual ~ObserverSubject() {};
-	virtual void Attach(Observer* observer) = 0;
-	virtual void Detach(Observer* observer) = 0;
-	virtual void Notify() = 0;
+	virtual void registerObserver(Observer* observer) = 0;
+	virtual void unregisterObserver(Observer* observer) = 0;
+	virtual void notify() = 0;
 };

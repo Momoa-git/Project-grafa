@@ -12,10 +12,10 @@ using namespace::std;
 class FactoryModel
 {
 public:
-	string model_title;
+	string modelTitle;
 
 	FactoryModel();
-	 Model* newModel(string model_title);
+	 Model* newModel(string modelTitle);
 
 
 

@@ -1,10 +1,5 @@
 #include "Shader.h"
 
-Shader::Shader(GLuint shaderID)
-{
-	this->shader = shaderID;
-}
-
 Shader::Shader(const char* vertex_shader, const char* fragment_shader) 
 {
 	ShaderLoader shaderLoader = ShaderLoader(vertex_shader, fragment_shader, &this->shader);
@@ -29,6 +24,10 @@ GLuint Shader::getShader()
 {
 	return shader;
 
+}
+GLint Shader::getUniform(const char* name)
+{
+	return glGetUniformLocation(shader, name);
 }
 
 void Shader::updateShader(glm::mat4 viewMat, glm::mat4 projMat, glm::vec3 cameraPos)

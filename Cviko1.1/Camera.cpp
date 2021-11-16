@@ -4,16 +4,16 @@
 
 Camera::Camera(int width, int height, glm::vec3 position)
 {
-	Position = position;
-	yaw = -90.0f;
+	this->position = position;
+	bias = -90.0f;
 	pitch = 0.0f;
-	MovementSpeed = 0.1f;
-	viewMat = glm::lookAt(Position, Position + Orientation, WorldUp);
+	movementSpeed = 0.1f;
+	viewMat = glm::lookAt(position, position + orientation, WorldUp);
 	projMat = glm::perspective(glm::radians(45.0f), (float)width / height, 0.1f, 100.0f);
-	CalcOrientation();
+	calcOrientation();
 }
 
-void Camera::UpdateShader(GLuint shaderProg) {
+void Camera::updateShader(GLuint shaderProg) {
 	GLint idViewMat = glGetUniformLocation(shaderProg, "viewMatrix");
 	GLint idProjMat = glGetUniformLocation(shaderProg, "projectionMatrix");
 
@@ -21,48 +21,51 @@ void Camera::UpdateShader(GLuint shaderProg) {
 	glUniformMatrix4fv(idProjMat, 1, GL_FALSE, &projMat[0][0]);
 
 }
-void Camera::CalcOrientation() {
+// pocitani smerovych vektoru kamery
+void Camera::calcOrientation() {
 	glm::vec3 front;
-	front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	front.x = cos(glm::radians(bias)) * cos(glm::radians(pitch));
 	front.y = sin(glm::radians(pitch));
-	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-	Orientation = glm::normalize(front);
-	// also re-calculate the Right and Up vector
-	Right = glm::normalize(glm::cross(Orientation, WorldUp));  // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
-	Up = glm::normalize(glm::cross(Right, Orientation));
+	front.z = sin(glm::radians(bias)) * cos(glm::radians(pitch));
+	orientation = glm::normalize(front);
+
+	Right = glm::normalize(glm::cross(orientation, WorldUp));
+	Up = glm::normalize(glm::cross(Right, orientation));
+} 
+void Camera::calcView() {
+	viewMat = glm::lookAt(position, position + orientation, WorldUp);
+	notify();
 }
-void Camera::CalcView() {
-	viewMat = glm::lookAt(Position, Position + Orientation, WorldUp);
-	Notify();
-}
-void Camera::Move(Camera_Movement direction) {
-	GLfloat velocity = MovementSpeed;
+void Camera::move(Camera_Movement direction) {
+	GLfloat velocity = movementSpeed;
 	printf("direction %d\n", direction);
+
 	switch (direction) {
 	case CAM_FORWARD:
-		Position += Orientation * velocity;
+		position += orientation * velocity;
 		break;
 	case CAM_BACKWARD:
-		Position -= Orientation * velocity;
+		position -= orientation * velocity;
 		break;
 	case CAM_LEFT:
-		Position -= Right * velocity;
+		position -= Right * velocity;
 		break;
 	case CAM_RIGHT:
-		Position += Right * velocity;
+		position += Right * velocity;
 		break;
 	case CAM_UP:
-		Position += Up * velocity;
+		position += Up * velocity;
 		break;
 	case CAM_DOWN:
-		Position -= Up * velocity;
+		position -= Up * velocity;
 		break;
 	}
-	CalcView();
+	calcView();
 }
-void Camera::Rotate(double xoffset, double yoffset, GLboolean constrainPitch) {
-	yaw += xoffset * Sensitivity;
-	pitch -= yoffset * Sensitivity;
+// otaceni mysis
+void Camera::rotate(double xoffset, double yoffset, GLboolean constrainPitch) {
+	bias += xoffset * sensitivity;
+	pitch -= yoffset * sensitivity;
 
 	// make sure that when pitch is out of bounds, screen doesn't get flipped
 	if (constrainPitch)
@@ -72,24 +75,24 @@ void Camera::Rotate(double xoffset, double yoffset, GLboolean constrainPitch) {
 		if (pitch < -89.0f)
 			pitch = -89.0f;
 	}
-	CalcOrientation();
-	CalcView();
+	calcOrientation();
+	calcView();
 }
 
 //Observer functions
 
-void Camera::Attach(Observer* observer) {
+void Camera::registerObserver(Observer* observer) {
 	observers.push_back(observer);
 }
-void Camera::Detach(Observer* observer) {
+void Camera::unregisterObserver(Observer* observer) {
 	auto iterator = std::find(observers.begin(), observers.end(), observer);
 
 	if (iterator != observers.end()) { // observer found
 		observers.erase(iterator); // remove the observer
 	}
 }
-void Camera::Notify() {
+void Camera::notify() {
 	for (Observer* observer : observers) { // notify all observers
-		observer->updateShader(viewMat, projMat, Position);
+		observer->updateShader(viewMat, projMat, position);
 	}
 }

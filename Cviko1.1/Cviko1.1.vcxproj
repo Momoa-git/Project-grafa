@@ -76,12 +76,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\glew-2.1.0\include;C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\glfw-3.3.4.bin.WIN32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\soil\include;C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\glew-2.1.0\include;C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\glfw-3.3.4.bin.WIN32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\glfw-3.3.4.bin.WIN32\lib-vc2019;C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\glew-2.1.0\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glfw3.lib;glew32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\glfw-3.3.4.bin.WIN32\lib-vc2019;C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\glew-2.1.0\lib\Release\Win32;C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\soil\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glfw3.lib;glew32.lib;glew32s.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -126,6 +126,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BuilderModel.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="FactoryModel.cpp" />
@@ -136,12 +137,15 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderLoader.cpp" />
+    <ClCompile Include="Stb.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Transformation.cpp" />
     <ClCompile Include="VAO.cpp" />
     <ClCompile Include="VBO.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BuilderModel.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="FactoryModel.h" />
@@ -150,6 +154,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="Models\Cube.h" />
     <ClInclude Include="Models\CubeWithoutBase.h" />
+    <ClInclude Include="Models\Plain_texture.h" />
     <ClInclude Include="Models\Pyramid.h" />
     <ClInclude Include="Models\sphere.h" />
     <ClInclude Include="Models\suzi_flat.h" />
@@ -160,6 +165,8 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="ObserverSubject.h" />
+    <ClInclude Include="stb.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="Transformation.h" />
     <ClInclude Include="VAO.h" />
     <ClInclude Include="VBO.h" />
@@ -168,13 +175,16 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="Fragment_shader.frag" />
     <None Include="Fragment_shader_const.frag" />
     <None Include="Fragment_shader_lambert.frag" />
+    <None Include="Fragment_shader_texture.frag" />
     <None Include="Models\Fragment_shader_phong.frag" />
     <None Include="Vertex_shader.vec" />
     <None Include="Vertex_shader_lambert.vec" />
     <None Include="Vertex_shader_phong.vec" />
+    <None Include="Vertex_shader_texture.vec" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

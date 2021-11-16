@@ -57,6 +57,15 @@
     <ClCompile Include="FactoryObject.cpp">
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Zdrojové soubory</Filter>
+    </ClCompile>
+    <ClCompile Include="Stb.cpp">
+      <Filter>Zdrojové soubory</Filter>
+    </ClCompile>
+    <ClCompile Include="BuilderModel.cpp">
+      <Filter>Zdrojové soubory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -131,6 +140,18 @@
     <ClInclude Include="FactoryObject.h">
       <Filter>Hlavičkové soubory</Filter>
     </ClInclude>
+    <ClInclude Include="Models\Plain_texture.h">
+      <Filter>Hlavičkové soubory</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Hlavičkové soubory</Filter>
+    </ClInclude>
+    <ClInclude Include="stb.h">
+      <Filter>Hlavičkové soubory</Filter>
+    </ClInclude>
+    <ClInclude Include="BuilderModel.h">
+      <Filter>Hlavičkové soubory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Fragment_shader.frag">
@@ -154,5 +175,12 @@
     <None Include="Vertex_shader_phong.vec">
       <Filter>Hlavičkové soubory</Filter>
     </None>
+    <None Include="Fragment_shader_texture.frag">
+      <Filter>Hlavičkové soubory</Filter>
+    </None>
+    <None Include="Vertex_shader_texture.vec">
+      <Filter>Hlavičkové soubory</Filter>
+    </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

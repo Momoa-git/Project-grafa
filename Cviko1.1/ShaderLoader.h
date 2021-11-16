@@ -24,7 +24,6 @@ public:
 	~ShaderLoader();
 	GLuint loadShader(const char* vertexFileName, const char* fragmentFileName);
 	ShaderLoader();
-	void deleteShader();
 
 
 

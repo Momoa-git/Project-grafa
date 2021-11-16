@@ -12,7 +12,7 @@ private:
 public:
 	int sceneCount;
 	Scene(int sceneCount);
-	void draw(GLfloat timeDelta);
+	void draw();
 	Camera* getCurrentCam();
 	void addCamera(Camera* cam, GLboolean setCurrent = true);
 	void addObject(Object* obj);

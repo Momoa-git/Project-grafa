@@ -6,23 +6,13 @@
 #include "Transformation.h"
 #include "Camera.h"
 #include "Scene.h"
-#include "Models/Cube.h"
-#include "Models/CubeWithoutBase.h"
-#include "Models/sphere.h"
-#include "Models/suzi_flat.h"
-#include "Models/suzi_smooth.h"
-#include "Models/Tree.h"
-#include "Models/plain.h"
-#include "Models/gift.h"
-#include "Models/bushes.h"
 #include "ShaderLoader.h"
 #include "FactoryModel.h"
 #include "FactoryObject.h"
 
 
 Engine* Engine::instance = 0;
-float deltTime = 0.0f;
-float lastFrame = 0.0f;
+
 
 void Engine::init() {
 
@@ -51,44 +41,28 @@ void Engine::startRendering() {
 
 	int sceneCount = 0;
 
-
-
-	//glm::mat4 viewMat = glm::lookAt(eye, eye + target, up);
-	//glm::mat4 viewMat = glm::lookAt(glm::vec3(0.0f, 1.0f, -5.0f), glm::vec3(0.0f, 1.0f, -5.0f) + glm::vec3(0.0f, -0.3f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	//glm::mat4 projMat = glm::perspective(glm::radians(45.0f), 800.f / 600.f, 0.1f, 100.0f);
-
-
-	glfwSetCursorPos(window->getGLFWWindow(), (window->getWidth() / 2), (window->getHeight() / 2));
-
-/*
-	GLuint defaulShaderID = 0;
-	GLuint constShaderID = 0;
-	GLuint lambertShaderID = 0;
-	GLuint phongShaderID = 0;
-
-	new ShaderLoader("vertex_shader.vec", "fragment_shader.frag", &defaulShaderID);
-	new ShaderLoader("vertex_shader_const.vec", "fragment_shader_const.frag", &constShaderID);
-	new ShaderLoader("vertex_shader_lambert.vec", "fragment_shader_lambert.frag", &lambertShaderID);
-	new ShaderLoader("vertex_shader_phong.vec", "fragment_shader_phong.frag", &phongShaderID);
-*/
-
-
 	Shader* defaultShader = new Shader("vertex_shader.vec", "fragment_shader.frag");
 	Shader* constShader = new Shader("vertex_shader_const.vec", "fragment_shader_const.frag");
 	Shader* lambertShader = new Shader("vertex_shader_lambert.vec", "fragment_shader_lambert.frag");
 	Shader* phongShader = new Shader("vertex_shader_phong.vec", "fragment_shader_phong.frag");
-
+	Shader* testShader = new Shader("vertex_shader_texture.vec", "fragment_shader_texture.frag");
 
 
 	//Object* cube = new Object(new Model(Cube, 20 * (3 + 3), 6, 3, 2, GL_TRIANGLE_STRIP), phongShader);
-//	Object* cube2 = new Object(new Model(CubeWithoutBase, 10 * (3 + 3), 6, 3, 2, GL_TRIANGLE_STRIP), phongShader);
 
-	
 	FactoryObject* factoryO = new FactoryObject();
 	FactoryModel* factoryM = new FactoryModel();
 
-	//Object* koule = factoryO->newObject(factoryM->newModel("sphere"), phongShader);
-	
+
+	Camera* camera = new Camera(window->getWidth(), window->getHeight(), glm::vec3(0.0f, 0.0f, 8.0f));
+	camera->registerObserver(defaultShader);
+	camera->registerObserver(constShader);
+	camera->registerObserver(lambertShader);
+	camera->registerObserver(phongShader);
+	camera->registerObserver(testShader);
+
+
+
 // SCENE BALL
 	
 	Object* ball_R = factoryO->newObject(factoryM->newModel("sphere"), phongShader);
@@ -96,11 +70,14 @@ void Engine::startRendering() {
 	Object* ball_U = factoryO->newObject(factoryM->newModel("sphere"), phongShader);
 	Object* ball_D = factoryO->newObject(factoryM->newModel("sphere"), phongShader);
 //	Object* monkey = new Object(new Model(suziSmooth, 2904 * (3 + 3), 6), phongShader);
+	//Object* test = factoryO->newObject(factoryM->newModel("plainTexture"), testShader);
+
+
 
 // SCENE FORREST
-	Object* plain = factoryO->newObject(factoryM->newModel("plain"), phongShader);
+	Object* plain = factoryO->newObject(factoryM->newModel("plainTexture"), testShader);
 	Transformation::translate(plain->getMatrix(), glm::vec3(7.0f, 0.0f, -11.0f));
-	Transformation::scale(plain->getMatrix(), glm::vec3(20.0f, 10.0f, 20.0f));
+	Transformation::scale(plain->getMatrix(), glm::vec3(100.0f, 10.0f, 100.0f));
 	Object* tree = factoryO->newObject(factoryM->newModel("tree"), phongShader);
 	Transformation::translate(tree->getMatrix(), glm::vec3(3.0f, 0.0f, -7.0f));
 	Object* tree2 = factoryO->newObject(factoryM->newModel("tree"), phongShader);
@@ -136,26 +113,6 @@ void Engine::startRendering() {
 
 
 
-//SCENE CHRISTMAS TREE
-	Object* plain2 = factoryO->newObject(factoryM->newModel("plain"), phongShader);
-	Transformation::scale(plain2->getMatrix(), glm::vec3(10.0f, 10.0f, 10.0f));
-	Object* treeCH = factoryO->newObject(factoryM->newModel("tree"), lambertShader);
-
-	/*
-	Object* gift = factoryO->newObject(new Model(gift_plain, 92814 * (3 + 3), 6), defaultShader);
-	Object* gift2 = factoryO->newObject(new Model(gift_plain, 92814 * (3 + 3), 6), defaultShader);
-	Object* gift3 = factoryO->newObject(new Model(gift_plain, 92814 * (3 + 3), 6), defaultShader);
-	Object* gift4 = factoryO->newObject(new Model(gift_plain, 92814 * (3 + 3), 6), defaultShader);
-	
-	*/
-
-	Camera* camera = new Camera(window->getWidth(), window->getHeight(), glm::vec3(0.0f, 0.0f, 8.0f));
-	camera->Attach(defaultShader);
-	camera->Attach(constShader);
-	camera->Attach(lambertShader);
-	camera->Attach(phongShader);
-	
-
 
 	Scene* sceneBall = new Scene(sceneCount);
 	sceneCount++;
@@ -187,18 +144,39 @@ void Engine::startRendering() {
 	forrest->addObject(bushes5);
 	forrest->addObject(bushes6);
 	forrest->setLightPosition(glm::vec3(0.0f, 8.0f, 0.0));
-	//forrest->AddObject(gift2);
-	//forrest->AddObject(gift3);
-	//forrest->AddObject(gift4);
 	vecScenes.push_back(forrest);
 	
-	Scene* christmasTree = new Scene(sceneCount);
+
+	Scene* christmas = new Scene(sceneCount);
 	sceneCount++;
-	christmasTree->addCamera(camera);
-	christmasTree->addObject(plain2);
-	christmasTree->addObject(treeCH);
-	christmasTree->setLightPosition(glm::vec3(0.0f, 8.0f, 0.0));
-	vecScenes.push_back(christmasTree);
+	Object* plain2 = factoryO->newObject(factoryM->newModel("plain"), phongShader);
+	Transformation::scale(plain2->getMatrix(), glm::vec3(10.0f, 10.0f, 10.0f));
+	Object* treeCH = factoryO->newObject(factoryM->newModel("tree"), lambertShader);
+
+	christmas->addCamera(camera);
+	christmas->addObject(plain2);
+	christmas->addObject(treeCH);
+
+	for (int i = 0; i < 30; i++)
+	{
+		Object* gift;
+
+		float randomX = ((float)rand()) / (float)RAND_MAX;
+		float diff = 7 - (-7);
+		float x = (randomX * diff) +(- 7);
+
+		float randomZ = ((float)rand()) / (float)RAND_MAX;
+		float z = (randomZ * diff) + (-7);
+
+		gift = factoryO->newObject(factoryM->newModel("gift"), defaultShader);
+		Transformation::translate(gift->getMatrix(), glm::vec3(x, 0.0f, z));
+		Transformation::scale(gift->getMatrix(), glm::vec3(2.0f, 2.0f, 2.0f));
+
+		christmas->addObject(gift);
+	}
+
+	christmas->setLightPosition(glm::vec3(0.0f, 10.0f, 0.0));
+	vecScenes.push_back(christmas);
 
 	
 /*
@@ -218,23 +196,19 @@ void Engine::startRendering() {
 //	Transformation::translate(gift4->getMatrix(), glm::vec3(12.8f, 0.0f, -15.6f));
 	
 
-	
-	
-	scene = vecScenes.back();
+	scene = vecScenes.at(0);
 	glEnable(GL_DEPTH_TEST);
 
-	scene->getCurrentCam()->Notify();
+	scene->getCurrentCam()->notify();
 	while (!glfwWindowShouldClose(this->window->getGLFWWindow())) 
 	{
-		float currentFrame = glfwGetTime();
-		deltTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
+	
 
 		// clear color and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//scene->getCurrentCam()->UpdateShader(shader->getShader());
-		scene->draw(deltTime);
+		scene->draw();
 
 		processHeldKeys();
 
@@ -257,11 +231,13 @@ void Engine::startRendering() {
 	exit(EXIT_SUCCESS);
 }
 
-Window* Engine::getWindow() {
+Window* Engine::getWindow() 
+{
 	return this->window;
 }
 
-void Engine::nextScene() {
+void Engine::nextScene() 
+{
 	GLint nextScene = this->scene->sceneCount + 1;
 	if (nextScene >= vecScenes.size())
 		nextScene = 0;
@@ -270,7 +246,18 @@ void Engine::nextScene() {
 	printf("change scene %d\n", nextScene);
 }
 
-void Engine::onClick(int button, int action, double x, double y) {
+void Engine::previousScene()
+{
+	GLint prevScene = this->scene->sceneCount - 1;
+	if (prevScene < 0)
+		prevScene = vecScenes.size()-1;
+	this->scene = vecScenes.at(prevScene);
+
+	printf("change scene %d\n", prevScene);
+}
+
+void Engine::onClick(int button, int action, double x, double y) 
+{
 	if (action == GLFW_PRESS) {
 		printf("press %d %d %f %f\n", button, action, x, y);
 	}
@@ -280,7 +267,8 @@ void Engine::onClick(int button, int action, double x, double y) {
 	return;
 }
 
-void Engine::onKey(int key, int scancode, int action, int mods) {
+void Engine::onKey(int key, int scancode, int action, int mods) 
+{
 	if (action == GLFW_PRESS) {
 		printf("press %d %d %d %d\n", key, scancode, action, mods);
 	}
@@ -289,16 +277,20 @@ void Engine::onKey(int key, int scancode, int action, int mods) {
 	}
 	if (action == GLFW_PRESS && key == GLFW_KEY_RIGHT)
 		this->nextScene();
+
+	if (action == GLFW_PRESS && key == GLFW_KEY_LEFT)
+		this->previousScene();
 	return;
 }
 
 
 
-void Engine::onMove(double x, double y) {
+void Engine::onMove(double x, double y) 
+{
 	printf("move %f %f \n", x, y);
-	double xmove, ymove;
-	xmove = x - (window->getWidth() / 2);
-	ymove = y - (window->getHeight() / 2);
+	double moveX, moveY;
+	moveX = x - (window->getWidth() / 2);
+	moveY = y - (window->getHeight() / 2);
 
 	glfwSetCursorPos(window->getGLFWWindow(), (window->getWidth() / 2), (window->getHeight() / 2));
 
@@ -306,11 +298,12 @@ void Engine::onMove(double x, double y) {
 	//this->forrest->getCurrentCam()->Rotate(xmove, ymove);
 	if (glfwGetMouseButton(window->getGLFWWindow(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
 	{
-		this->scene->getCurrentCam()->Rotate(xmove, ymove);
+		this->scene->getCurrentCam()->rotate(moveX, moveY);
 	}
 }
 
-Engine::Engine() {
+Engine::Engine() 
+{
 	init();
 }
 
@@ -326,31 +319,30 @@ Engine* Engine::getInstance()
 
 void Engine::processHeldKeys()
 {
-	
 
 	if (glfwGetKey(window->getGLFWWindow(), GLFW_KEY_W) == GLFW_PRESS)
 	{
-		scene->getCurrentCam()->Move(CAM_FORWARD);
+		scene->getCurrentCam()->move(CAM_FORWARD);
 	}
 	if (glfwGetKey(window->getGLFWWindow(), GLFW_KEY_A) == GLFW_PRESS)
 	{
-		scene->getCurrentCam()->Move(CAM_LEFT);
+		scene->getCurrentCam()->move(CAM_LEFT);
 	}
 	if (glfwGetKey(window->getGLFWWindow(), GLFW_KEY_S) == GLFW_PRESS)
 	{
-		scene->getCurrentCam()->Move(CAM_BACKWARD);
+		scene->getCurrentCam()->move(CAM_BACKWARD);
 	}
 	if (glfwGetKey(window->getGLFWWindow(), GLFW_KEY_D) == GLFW_PRESS)
 	{
-		scene->getCurrentCam()->Move(CAM_RIGHT);
+		scene->getCurrentCam()->move(CAM_RIGHT);
 	}
 	if (glfwGetKey(window->getGLFWWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 	{
-		scene->getCurrentCam()->Move(CAM_UP);
+		scene->getCurrentCam()->move(CAM_UP);
 	}
 	if (glfwGetKey(window->getGLFWWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
 	{
-		scene->getCurrentCam()->Move(CAM_DOWN);
+		scene->getCurrentCam()->move(CAM_DOWN);
 	}
 	
 	

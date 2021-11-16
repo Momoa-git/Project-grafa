@@ -36,8 +36,10 @@ GLuint ShaderLoader::loadShader(const char* vertexFileName, const char* fragment
 	int vlen = vertexShaderString.length();
 	int flen = fragmentShaderString.length();
 
-	if (vertexShaderString.empty()) printf("Empty Vertex Shader\n");
-	if (fragmentShaderString.empty()) printf("Empty Fragment Shader\n");
+	if (vertexShaderString.empty()) 
+		printf("Empty Vertex Shader\n");
+	if (fragmentShaderString.empty())
+		printf("Empty Fragment Shader\n");
 
 	const char* vertexShaderCStr = vertexShaderString.c_str();
 	const char* fragmentShaderCStr = fragmentShaderString.c_str();

@@ -20,15 +20,12 @@ private:
 	glm::mat4 projMat;
 	glm::vec3 cameraPos;
 
-
-
-
 public:
-	Shader(GLuint shader);
 	Shader(const char* vertex_shader, const char* fragment_shader);
 	
-	GLuint getShader();  // private
+	GLuint getShader();  
 	void drawShader();
+	GLint getUniform(const char* name);
 
 	virtual void updateShader(glm::mat4 viewMat, glm::mat4 projMat, glm::vec3 cameraPos) override;
 

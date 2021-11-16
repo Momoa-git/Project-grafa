@@ -25,5 +25,5 @@ float specularConstant = pow(max(dot(toCamVector, reflectFromLightVector),0), 30
 vec3 specular = vec3(1.f, 1.f, 1.f) * specularConstant;
 //Output
 out_Color = vec4(baseColor, 1.f) * (vec4(ambientLight, 1.f)
-        +   vec4(diffuse, 1.f) + vec4(specular, 1.f)); 
+        +   vec4(diffuse, 1.f)) + vec4(specular, 1.f); 
 }

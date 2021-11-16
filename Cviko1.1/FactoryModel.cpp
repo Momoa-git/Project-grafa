@@ -4,28 +4,50 @@
 #include "Models/plain.h"
 #include "Models/Tree.h"
 #include "Models/bushes.h"
+#include "Models/gift.h"
+#include "Models/Plain_texture.h"
 
 FactoryModel::FactoryModel()
 {
 
 }
 
-Model* FactoryModel::newModel(string model_title)
+Model* FactoryModel::newModel(string modelTitle)
 {
-	if (model_title == "sphere")
-		return new Model(sphere, 2880 * (3 + 3), 6);
+	if (modelTitle == "sphere")
+		//	return new Model(sphere, 2880 * (3 + 3), 6);
+		return Model::create(sphere, 2880, 6).positionAttrib(0).normalAttrib(3).build();
 
-	else if (model_title == "suziSmooth")
-		return new Model(sphere, 2904 * (3 + 3), 6);
+	else if (modelTitle == "suziSmooth")
+		//return new Model(sphere, 2904 * (3 + 3), 6);
+	    return Model::create(sphere, 2880, 6).positionAttrib(0).normalAttrib(3).build();
 
-	else if (model_title == "plain")
-		return new Model(plain_arr, 6 * (3 + 3), 6);
+	else if (modelTitle == "plainTexture")
+	{
+		cout << "TEST" << endl;
+	//	Model* model = new Model(plain_texture, 6 * (3 + 3 + 2), 6);
 
-	else if (model_title == "tree")
-		return new Model(tree_plain, 92814 * (3 + 3), 6);
+		Model* model = Model::create(plain_texture, 6, 8).positionAttrib(0).normalAttrib(3).texAttrib(6).build();
 
-	else if (model_title == "bushes")
-		return new Model(bushes_plain, 8730 * (3 + 3), 6);
+		Texture* wood = new Texture("./Texture/cubemap/negy.jpg", 0);
+		model->setTexture(wood);
+
+		return model;
+	}
+	else if (modelTitle == "tree")
+		//return new Model(tree_plain, 92814 * (3 + 3), 6);
+	    return Model::create(tree_plain, 92814, 6).positionAttrib(0).normalAttrib(3).build();
+
+	else if (modelTitle == "bushes")
+	//	return new Model(bushes_plain, 8730 * (3 + 3), 6);
+		return Model::create(bushes_plain, 8730, 6).positionAttrib(0).normalAttrib(3).build();
+
+	else if (modelTitle == "gift")
+		//return new Model(gift_plain, 92814 * (3 + 3), 6);
+	  return Model::create(gift_plain, 66624, 6).positionAttrib(0).normalAttrib(3).build();
+	
+	else if (modelTitle == "plain")
+		return Model::create(plain_arr, 6, 6).positionAttrib(0).normalAttrib(3).build();
 
 	else
 		return NULL;
