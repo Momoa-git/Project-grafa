@@ -6,7 +6,7 @@ VAO::VAO()
 	glGenVertexArrays(1, &id); //generate the VAO
 }
 //stdie nastavim na delku line
-//offset o kolik je posunutý stride
+//offset o kolik je posunutý strideww
 void VAO::setAttribute(VBO& VBO, GLuint layout, int pointsLen, GLenum dataType, GLsizeiptr stride, void* offset)
 {
 	VBO.BindBuffer();
