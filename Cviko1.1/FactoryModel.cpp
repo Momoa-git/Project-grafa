@@ -24,12 +24,22 @@ Model* FactoryModel::newModel(string modelTitle)
 
 	else if (modelTitle == "plainTexture")
 	{
-		cout << "TEST" << endl;
 	//	Model* model = new Model(plain_texture, 6 * (3 + 3 + 2), 6);
 
 		Model* model = Model::create(plain_texture, 6, 8).positionAttrib(0).normalAttrib(3).texAttrib(6).build();
 
 		Texture* wood = new Texture("./Texture/cubemap/negy.jpg", 0);
+		model->setTexture(wood);
+
+		return model;
+	}
+	else if (modelTitle == "plainNegX")
+	{
+		//	Model* model = new Model(plain_texture, 6 * (3 + 3 + 2), 6);
+
+		Model* model = Model::create(plain_texture, 6, 8).positionAttrib(0).normalAttrib(3).texAttrib(6).build();
+
+		Texture* wood = new Texture("./Texture/cubemap/negx.jpg", 0);
 		model->setTexture(wood);
 
 		return model;

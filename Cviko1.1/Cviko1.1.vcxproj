@@ -137,6 +137,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderLoader.cpp" />
+    <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="Stb.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Transformation.cpp" />
@@ -161,10 +162,13 @@
     <ClInclude Include="Models\Tree.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Observer.h" />
+    <ClInclude Include="ObserverDrawable.h" />
+    <ClInclude Include="ObserverSkyBox.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="ObserverSubject.h" />
+    <ClInclude Include="SkyBox.h" />
     <ClInclude Include="stb.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Transformation.h" />
@@ -179,11 +183,13 @@
     <None Include="Fragment_shader.frag" />
     <None Include="Fragment_shader_const.frag" />
     <None Include="Fragment_shader_lambert.frag" />
+    <None Include="Fragment_shader_phong_texture.frag" />
     <None Include="Fragment_shader_texture.frag" />
     <None Include="Models\Fragment_shader_phong.frag" />
     <None Include="Vertex_shader.vec" />
     <None Include="Vertex_shader_lambert.vec" />
     <None Include="Vertex_shader_phong.vec" />
+    <None Include="Vertex_shader_phong_texture.vec" />
     <None Include="Vertex_shader_texture.vec" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

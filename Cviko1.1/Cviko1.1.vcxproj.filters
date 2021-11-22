@@ -66,6 +66,9 @@
     <ClCompile Include="BuilderModel.cpp">
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
+    <ClCompile Include="SkyBox.cpp">
+      <Filter>Zdrojové soubory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -152,6 +155,15 @@
     <ClInclude Include="BuilderModel.h">
       <Filter>Hlavičkové soubory</Filter>
     </ClInclude>
+    <ClInclude Include="ObserverSkyBox.h">
+      <Filter>Hlavičkové soubory</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBox.h">
+      <Filter>Hlavičkové soubory</Filter>
+    </ClInclude>
+    <ClInclude Include="ObserverDrawable.h">
+      <Filter>Hlavičkové soubory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Fragment_shader.frag">
@@ -175,12 +187,18 @@
     <None Include="Vertex_shader_phong.vec">
       <Filter>Hlavičkové soubory</Filter>
     </None>
-    <None Include="Fragment_shader_texture.frag">
+    <None Include="ClassDiagram.cd" />
+    <None Include="Vertex_shader_phong_texture.vec">
+      <Filter>Hlavičkové soubory</Filter>
+    </None>
+    <None Include="Fragment_shader_phong_texture.frag">
       <Filter>Hlavičkové soubory</Filter>
     </None>
     <None Include="Vertex_shader_texture.vec">
       <Filter>Hlavičkové soubory</Filter>
     </None>
-    <None Include="ClassDiagram.cd" />
+    <None Include="Fragment_shader_texture.frag">
+      <Filter>Hlavičkové soubory</Filter>
+    </None>
   </ItemGroup>
 </Project>

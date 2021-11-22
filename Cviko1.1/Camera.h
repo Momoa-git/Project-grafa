@@ -24,6 +24,7 @@ class Camera : public ObserverSubject
 {
 public:
 	std::vector<Observer*> observers;
+	std::vector<ObserverSkyBox*> observersSky;
 	glm::vec3 position;
 	glm::vec3 orientation = glm::vec3(0.0f, 0.0f, -1.0f);
 	glm::vec3 Right = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -43,9 +44,12 @@ public:
 	void calcView();
 	void move(Camera_Movement direction);
 	void rotate(double xoffset, double yoffset, GLboolean constrainPitch = true);
+	void calcProjection(int width, int height);
 
 	virtual void registerObserver(Observer* observer) override;
 	virtual void unregisterObserver(Observer* observer) override;
+	virtual void registerObserver(ObserverSkyBox* observer) override;
+	virtual void unregisterObserver(ObserverSkyBox* observer) override;
 	virtual void notify() override;
 
 };

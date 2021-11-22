@@ -1,4 +1,8 @@
 #include "Object.h"
+Object::Object(){
+
+}
+
 
 Object::Object(Model* model, Shader* shader)
 {

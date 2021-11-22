@@ -4,6 +4,7 @@
 Scene::Scene(int sceneCount)
 {
 	currentCam = nullptr;
+	skybox = nullptr;
 	lightPosition = glm::vec3(0.0f, 0.0f, 0.0);
 	this->sceneCount = sceneCount;
 }
@@ -15,6 +16,9 @@ void Scene::setLightPosition(glm::vec3 lightPosition)
 
 void Scene::draw() 
 {
+	if (skybox != nullptr)
+		skybox->draw();
+
 	for (Object* element : objects)
 	{
 		//glUniform3fv(glGetUniformLocation(element->getShader()->getShader(), "lightPos"), 1, glm::value_ptr(this->lightPosition));
@@ -42,3 +46,9 @@ void Scene::addObject(Object* obj)
 	objects.push_back(obj);
 }
 
+void Scene::setSkybox(SkyBox* skybox)
+{
+	this->skybox = skybox;
+	this->currentCam->registerObserver(this->skybox);
+
+}

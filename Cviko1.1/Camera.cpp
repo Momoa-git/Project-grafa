@@ -79,6 +79,14 @@ void Camera::rotate(double xoffset, double yoffset, GLboolean constrainPitch) {
 	calcView();
 }
 
+void Camera::calcProjection(int width, int height)
+{
+	projMat = glm::perspective(glm::radians(40.0f), (float)width / height, 0.1f, 100.0f);
+	this->notify();
+
+}
+
+
 //Observer functions
 
 void Camera::registerObserver(Observer* observer) {
@@ -91,8 +99,27 @@ void Camera::unregisterObserver(Observer* observer) {
 		observers.erase(iterator); // remove the observer
 	}
 }
+
+void Camera::registerObserver(ObserverSkyBox* observer) {
+	observersSky.push_back(observer);
+}
+void Camera::unregisterObserver(ObserverSkyBox* observer) {
+	auto iterator = std::find(observersSky.begin(), observersSky.end(), observer);
+
+	if (iterator != observersSky.end()) { // observer found
+		observersSky.erase(iterator); // remove the observer
+	}
+}
+
+
+
 void Camera::notify() {
 	for (Observer* observer : observers) { // notify all observers
 		observer->updateShader(viewMat, projMat, position);
 	}
+
+	for (ObserverSkyBox* observer : observersSky) { // notify all observers
+		observer->update(this->position);
+	}
+
 }

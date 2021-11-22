@@ -6,6 +6,7 @@
 #include "Transformation.h"
 #include "Camera.h"
 #include "Scene.h"
+#include "SkyBox.h"
 #include "ShaderLoader.h"
 #include "FactoryModel.h"
 #include "FactoryObject.h"
@@ -45,7 +46,8 @@ void Engine::startRendering() {
 	Shader* constShader = new Shader("vertex_shader_const.vec", "fragment_shader_const.frag");
 	Shader* lambertShader = new Shader("vertex_shader_lambert.vec", "fragment_shader_lambert.frag");
 	Shader* phongShader = new Shader("vertex_shader_phong.vec", "fragment_shader_phong.frag");
-	Shader* testShader = new Shader("vertex_shader_texture.vec", "fragment_shader_texture.frag");
+	Shader* phongTextureShader = new Shader("vertex_shader_phong_texture.vec", "fragment_shader_phong_texture.frag");
+	Shader* textureShader = new Shader("vertex_shader_texture.vec", "fragment_shader_texture.frag");
 
 
 	//Object* cube = new Object(new Model(Cube, 20 * (3 + 3), 6, 3, 2, GL_TRIANGLE_STRIP), phongShader);
@@ -59,11 +61,13 @@ void Engine::startRendering() {
 	camera->registerObserver(constShader);
 	camera->registerObserver(lambertShader);
 	camera->registerObserver(phongShader);
-	camera->registerObserver(testShader);
-
+	camera->registerObserver(phongTextureShader);
+	camera->registerObserver(textureShader);
 
 
 // SCENE BALL
+
+	SkyBox* skybox = new SkyBox(textureShader);
 	
 	Object* ball_R = factoryO->newObject(factoryM->newModel("sphere"), phongShader);
 	Object* ball_L = factoryO->newObject(factoryM->newModel("sphere"), phongShader);
@@ -75,9 +79,16 @@ void Engine::startRendering() {
 
 
 // SCENE FORREST
-	Object* plain = factoryO->newObject(factoryM->newModel("plainTexture"), testShader);
+	Object* plain = factoryO->newObject(factoryM->newModel("plainTexture"), phongTextureShader);
 	Transformation::translate(plain->getMatrix(), glm::vec3(7.0f, 0.0f, -11.0f));
-	Transformation::scale(plain->getMatrix(), glm::vec3(100.0f, 10.0f, 100.0f));
+	Transformation::scale(plain->getMatrix(), glm::vec3(20.0f, 10.0f, 20.0f));
+
+	Object* neg_X = factoryO->newObject(factoryM->newModel("plainNegX"), phongTextureShader);
+	Transformation::rotate(neg_X->getMatrix(), -1.57f, glm::vec3(0.0f, 0.0f, 1.0f));
+	Transformation::translate(neg_X->getMatrix(), glm::vec3(-17.0f, -12.0f, -11.0f));
+	Transformation::scale(neg_X->getMatrix(), glm::vec3(20.0f, 10.0f, 20.0f));
+
+
 	Object* tree = factoryO->newObject(factoryM->newModel("tree"), phongShader);
 	Transformation::translate(tree->getMatrix(), glm::vec3(3.0f, 0.0f, -7.0f));
 	Object* tree2 = factoryO->newObject(factoryM->newModel("tree"), phongShader);
@@ -121,6 +132,7 @@ void Engine::startRendering() {
 	sceneBall->addObject(ball_L);
 	sceneBall->addObject(ball_U);
 	sceneBall->addObject(ball_D);
+	sceneBall->setSkybox(skybox);
 	vecScenes.push_back(sceneBall);
 	
 
@@ -129,6 +141,7 @@ void Engine::startRendering() {
 	sceneCount++;
 	forrest->addCamera(camera);
 	forrest->addObject(plain);
+	forrest->addObject(neg_X);
 	forrest->addObject(tree);
 	forrest->addObject(tree2);
 	forrest->addObject(tree3);
