@@ -1,5 +1,5 @@
 #include "PointLight.h"
-
+//p
 PointLight::PointLight(glm::vec3 position) : LightBase() {
 	this->position = position;
 	this->constant = 1.0f;
