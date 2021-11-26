@@ -69,6 +69,18 @@
     <ClCompile Include="SkyBox.cpp">
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
+    <ClCompile Include="Lights\PointLight.cpp">
+      <Filter>Zdrojové soubory</Filter>
+    </ClCompile>
+    <ClCompile Include="Lights\DirectionalLight.cpp">
+      <Filter>Zdrojové soubory</Filter>
+    </ClCompile>
+    <ClCompile Include="Lights\SpotLight.cpp">
+      <Filter>Zdrojové soubory</Filter>
+    </ClCompile>
+    <ClCompile Include="Lights\LightBase.cpp">
+      <Filter>Zdrojové soubory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -164,6 +176,18 @@
     <ClInclude Include="ObserverDrawable.h">
       <Filter>Hlavičkové soubory</Filter>
     </ClInclude>
+    <ClInclude Include="Lights\PointLight.h">
+      <Filter>Hlavičkové soubory</Filter>
+    </ClInclude>
+    <ClInclude Include="Lights\DirectionalLight.h">
+      <Filter>Hlavičkové soubory</Filter>
+    </ClInclude>
+    <ClInclude Include="Lights\SpotLight.h">
+      <Filter>Hlavičkové soubory</Filter>
+    </ClInclude>
+    <ClInclude Include="Lights\LightBase.h">
+      <Filter>Hlavičkové soubory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Fragment_shader.frag">
@@ -198,6 +222,12 @@
       <Filter>Hlavičkové soubory</Filter>
     </None>
     <None Include="Fragment_shader_texture.frag">
+      <Filter>Hlavičkové soubory</Filter>
+    </None>
+    <None Include="Fragment_shader_light.frag">
+      <Filter>Hlavičkové soubory</Filter>
+    </None>
+    <None Include="Lights\Vertex_shader_light.vec">
       <Filter>Hlavičkové soubory</Filter>
     </None>
   </ItemGroup>

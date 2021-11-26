@@ -131,6 +131,10 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="FactoryModel.cpp" />
     <ClCompile Include="FactoryObject.cpp" />
+    <ClCompile Include="Lights\DirectionalLight.cpp" />
+    <ClCompile Include="Lights\LightBase.cpp" />
+    <ClCompile Include="Lights\PointLight.cpp" />
+    <ClCompile Include="Lights\SpotLight.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Object.cpp" />
@@ -152,6 +156,10 @@
     <ClInclude Include="FactoryModel.h" />
     <ClInclude Include="FactoryObject.h" />
     <ClInclude Include="Fragment_shader.h" />
+    <ClInclude Include="Lights\DirectionalLight.h" />
+    <ClInclude Include="Lights\LightBase.h" />
+    <ClInclude Include="Lights\PointLight.h" />
+    <ClInclude Include="Lights\SpotLight.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Models\Cube.h" />
     <ClInclude Include="Models\CubeWithoutBase.h" />
@@ -183,8 +191,10 @@
     <None Include="Fragment_shader.frag" />
     <None Include="Fragment_shader_const.frag" />
     <None Include="Fragment_shader_lambert.frag" />
+    <None Include="Fragment_shader_light.frag" />
     <None Include="Fragment_shader_phong_texture.frag" />
     <None Include="Fragment_shader_texture.frag" />
+    <None Include="Lights\Vertex_shader_light.vec" />
     <None Include="Models\Fragment_shader_phong.frag" />
     <None Include="Vertex_shader.vec" />
     <None Include="Vertex_shader_lambert.vec" />

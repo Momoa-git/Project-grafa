@@ -28,7 +28,7 @@ Model* FactoryModel::newModel(string modelTitle)
 
 		Model* model = Model::create(plain_texture, 6, 8).positionAttrib(0).normalAttrib(3).texAttrib(6).build();
 
-		Texture* wood = new Texture("./Texture/cubemap/negy.jpg", 0);
+		Texture* wood = new Texture("./Texture/test.png", 0);
 		model->setTexture(wood);
 
 		return model;

@@ -48,6 +48,7 @@ void Engine::startRendering() {
 	Shader* phongShader = new Shader("vertex_shader_phong.vec", "fragment_shader_phong.frag");
 	Shader* phongTextureShader = new Shader("vertex_shader_phong_texture.vec", "fragment_shader_phong_texture.frag");
 	Shader* textureShader = new Shader("vertex_shader_texture.vec", "fragment_shader_texture.frag");
+	Shader* lightShader = new Shader("vertex_shader_light.vec", "fragment_shader_light.frag");
 
 
 	//Object* cube = new Object(new Model(Cube, 20 * (3 + 3), 6, 3, 2, GL_TRIANGLE_STRIP), phongShader);
@@ -63,6 +64,7 @@ void Engine::startRendering() {
 	camera->registerObserver(phongShader);
 	camera->registerObserver(phongTextureShader);
 	camera->registerObserver(textureShader);
+	camera->registerObserver(lightShader);
 
 
 // SCENE BALL
@@ -82,12 +84,6 @@ void Engine::startRendering() {
 	Object* plain = factoryO->newObject(factoryM->newModel("plainTexture"), phongTextureShader);
 	Transformation::translate(plain->getMatrix(), glm::vec3(7.0f, 0.0f, -11.0f));
 	Transformation::scale(plain->getMatrix(), glm::vec3(20.0f, 10.0f, 20.0f));
-
-	Object* neg_X = factoryO->newObject(factoryM->newModel("plainNegX"), phongTextureShader);
-	Transformation::rotate(neg_X->getMatrix(), -1.57f, glm::vec3(0.0f, 0.0f, 1.0f));
-	Transformation::translate(neg_X->getMatrix(), glm::vec3(-17.0f, -12.0f, -11.0f));
-	Transformation::scale(neg_X->getMatrix(), glm::vec3(20.0f, 10.0f, 20.0f));
-
 
 	Object* tree = factoryO->newObject(factoryM->newModel("tree"), phongShader);
 	Transformation::translate(tree->getMatrix(), glm::vec3(3.0f, 0.0f, -7.0f));
@@ -122,6 +118,12 @@ void Engine::startRendering() {
 	Object* bushes6 = factoryO->newObject(factoryM->newModel("bushes"), phongShader);
 	Transformation::translate(bushes6->getMatrix(), glm::vec3(0.6f, 0.0f, -1.5f));
 
+// LIGHTS SCENE
+	Object* plainLight = factoryO->newObject(factoryM->newModel("plainTexture"), lightShader);
+	//Transformation::rotate(plainLight->getMatrix(), 0.02f, glm::vec3(1.0f, 0.0f, 0.0f));
+	Transformation::translate(plainLight->getMatrix(), glm::vec3(7.0f, 0.0f, -11.0f));
+	Transformation::scale(plainLight->getMatrix(), glm::vec3(20.0f, 10.0f, 20.0f));
+    
 
 
 
@@ -141,7 +143,6 @@ void Engine::startRendering() {
 	sceneCount++;
 	forrest->addCamera(camera);
 	forrest->addObject(plain);
-	forrest->addObject(neg_X);
 	forrest->addObject(tree);
 	forrest->addObject(tree2);
 	forrest->addObject(tree3);
@@ -159,6 +160,31 @@ void Engine::startRendering() {
 	forrest->setLightPosition(glm::vec3(0.0f, 8.0f, 0.0));
 	vecScenes.push_back(forrest);
 	
+//Light scenes
+	Scene* pointLightScene = new Scene(sceneCount);
+	sceneCount++;
+	pointLightScene->addCamera(camera);
+	pointLightScene->addObject(plainLight);
+	pointLightScene->addPointLight(PointLight(glm::vec3(0.0f, 6.0f, 0.0)));
+	pointLightScene->addPointLight(PointLight(glm::vec3(15.0f, 2.0f, 0.0)));
+	vecScenes.push_back(pointLightScene);
+
+	Scene* directLightScene = new Scene(sceneCount);
+	sceneCount++;
+	directLightScene->addCamera(camera);
+	directLightScene->addObject(plainLight);
+	directLightScene->setDirLight(DirectionalLight(glm::vec3(.0f, -1.f, 1.f)));
+	vecScenes.push_back(directLightScene);
+
+	Scene* spotLightScene = new Scene(sceneCount);
+	sceneCount++;
+	spotLightScene->addCamera(camera);
+	spotLightScene->addObject(plainLight);
+	spotLightScene->addSpotLight(SpotLight((glm::vec3(.0f, -1.f, -1.f)), (glm::vec3(.0f, 5.f, 0.f))));
+	spotLightScene->addSpotLight(SpotLight((glm::vec3(.6f, -1.f, 0.f)), (glm::vec3(.5f, 5.f, 0.f))));
+	vecScenes.push_back(spotLightScene);
+
+
 
 	Scene* christmas = new Scene(sceneCount);
 	sceneCount++;
