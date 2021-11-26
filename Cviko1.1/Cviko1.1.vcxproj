@@ -132,6 +132,7 @@
     <ClCompile Include="FactoryModel.cpp" />
     <ClCompile Include="FactoryObject.cpp" />
     <ClCompile Include="Lights\DirectionalLight.cpp" />
+    <ClCompile Include="Lights\LightAttenuation.cpp" />
     <ClCompile Include="Lights\LightBase.cpp" />
     <ClCompile Include="Lights\PointLight.cpp" />
     <ClCompile Include="Lights\SpotLight.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="FactoryObject.h" />
     <ClInclude Include="Fragment_shader.h" />
     <ClInclude Include="Lights\DirectionalLight.h" />
+    <ClInclude Include="Lights\LightAttenuation.h" />
     <ClInclude Include="Lights\LightBase.h" />
     <ClInclude Include="Lights\PointLight.h" />
     <ClInclude Include="Lights\SpotLight.h" />
