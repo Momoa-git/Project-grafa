@@ -124,7 +124,9 @@ void Engine::startRendering() {
 	Transformation::translate(plainLight->getMatrix(), glm::vec3(7.0f, 0.0f, -11.0f));
 	Transformation::scale(plainLight->getMatrix(), glm::vec3(20.0f, 10.0f, 20.0f));
     
-
+// BUILDING SCENE
+	Object* building = factoryO->newObject(factoryM->newModel("house"), lightShader);
+	Object* zombie = factoryO->newObject(factoryM->newModel("zombie"), lightShader);
 
 
 	Scene* sceneBall = new Scene(sceneCount);
@@ -184,8 +186,18 @@ void Engine::startRendering() {
 	spotLightScene->addSpotLight(SpotLight((glm::vec3(.6f, -1.f, 0.f)), (glm::vec3(.5f, 5.f, 0.f))));
 	vecScenes.push_back(spotLightScene);
 
+//Building scene
+
+	Scene* houseScene = new Scene(sceneCount);
+	sceneCount++;
+	houseScene->addCamera(camera);
+	houseScene->addObject(building);
+	houseScene->addObject(zombie);
+	houseScene->setDirLight(DirectionalLight(glm::vec3(.0f, -1.f, 1.f)));
+	vecScenes.push_back(houseScene);
 
 
+//Christmas scene
 	Scene* christmas = new Scene(sceneCount);
 	sceneCount++;
 	Object* plain2 = factoryO->newObject(factoryM->newModel("plain"), phongShader);

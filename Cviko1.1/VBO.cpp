@@ -9,6 +9,16 @@ VBO::VBO(const GLfloat* points, GLint pointsLen)
 
 }
 
+VBO::VBO(std::vector<float> data)
+{
+	id = 0;
+	glGenBuffers(1, &id);
+	glBindBuffer(GL_ARRAY_BUFFER, id);
+	glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), &data[0], GL_STATIC_DRAW);
+
+}
+
+
 void VBO::BindBuffer()
 {
 	glBindBuffer(GL_ARRAY_BUFFER, id);

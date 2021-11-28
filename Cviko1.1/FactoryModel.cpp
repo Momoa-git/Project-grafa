@@ -44,6 +44,25 @@ Model* FactoryModel::newModel(string modelTitle)
 
 		return model;
 	}
+	else if (modelTitle == "house")
+	{
+		Model* model = Model::create("./Models/model.obj").positionAttrib(0).normalAttrib(3).texAttrib(6).build();
+
+		Texture* textureBuilding = new Texture("./Texture/building.png", 0);
+		model->setTexture(textureBuilding);
+
+		return model;
+	}
+	else if (modelTitle == "zombie")
+	{
+		Model* model = Model::create("./Models/zombie.obj").positionAttrib(0).normalAttrib(3).texAttrib(6).build();
+
+		Texture* textureZombie = new Texture("./Texture/zombie.png", 0);
+		model->setTexture(textureZombie);
+
+		return model;
+	}
+
 	else if (modelTitle == "tree")
 		//return new Model(tree_plain, 92814 * (3 + 3), 6);
 	    return Model::create(tree_plain, 92814, 6).positionAttrib(0).normalAttrib(3).build();

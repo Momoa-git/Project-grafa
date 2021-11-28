@@ -76,12 +76,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\soil\include;C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\glew-2.1.0\include;C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\glfw-3.3.4.bin.WIN32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\soil\include;C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\glew-2.1.0\include;C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\glfw-3.3.4.bin.WIN32\include;C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\glfw-3.3.4.bin.WIN32\lib-vc2019;C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\glew-2.1.0\lib\Release\Win32;C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\soil\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glfw3.lib;glew32.lib;glew32s.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\glfw-3.3.4.bin.WIN32\lib-vc2019;C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\glew-2.1.0\lib\Release\Win32;C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\soil\lib;C:\Users\Adam\Desktop\ZPG\Cviko1.1\Library\assimp\lib\Win32\v140\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glfw3.lib;glew32.lib;glew32s.lib;SOIL.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

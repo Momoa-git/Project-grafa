@@ -3,6 +3,8 @@
 #include <stdexcept>
 #include <glm/vec4.hpp>
 #include <memory>
+#include <assimp/Importer.hpp>#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 #include "Window.h"
 #include "Scene.h"
 

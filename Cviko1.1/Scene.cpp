@@ -11,6 +11,7 @@ Scene::Scene(int sceneCount)
 //	this->spotLight = SpotLight();
 	
 }
+
 void Scene::setLightPosition(glm::vec3 lightPosition)
 {
 	this->lightPosition = lightPosition;

@@ -9,6 +9,7 @@ private:
 	Model* model;
 public:
 	BuilderModel(const GLfloat* points, int pointNo, int lineLen);
+	BuilderModel(const char* data);
 	BuilderModel mode(GLenum mode);
 	BuilderModel positionAttrib(GLint at);
 	BuilderModel normalAttrib(GLint at);

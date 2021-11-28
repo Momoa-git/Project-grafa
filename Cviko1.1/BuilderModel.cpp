@@ -3,6 +3,11 @@ BuilderModel::BuilderModel(const GLfloat* points, int pointNo, int lineLen) {
 	this->model = new Model(points, pointNo, lineLen);
 }
 
+BuilderModel::BuilderModel(const char* data)
+{
+	this->model = new Model(data);
+}
+
 BuilderModel BuilderModel::positionAttrib(GLint at) {
 	this->model->vao->BindBuffer();
 	this->model->vao->setAttribute(*this->model->vbo, 0, 3, GL_FLOAT, this->model->lineLen * sizeof(GL_FLOAT), (GLvoid*)(at * sizeof(GL_FLOAT)));
