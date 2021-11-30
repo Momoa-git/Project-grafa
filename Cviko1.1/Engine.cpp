@@ -13,7 +13,26 @@
 
 
 Engine* Engine::instance = 0;
+GLint objectCounter = 1;
 
+FactoryObject* factoryO = new FactoryObject();
+FactoryModel* factoryM = new FactoryModel();
+
+
+Engine::Engine()
+{
+	init();
+}
+
+Engine* Engine::getInstance()
+{
+	if (instance == 0)
+	{
+		instance = new Engine();
+	}
+
+	return instance;
+}
 
 void Engine::init() {
 
@@ -50,12 +69,13 @@ void Engine::startRendering() {
 	Shader* textureShader = new Shader("vertex_shader_texture.vec", "fragment_shader_texture.frag");
 	Shader* lightShader = new Shader("vertex_shader_light.vec", "fragment_shader_light.frag");
 
+	this->shader = lightShader;
 
 	//Object* cube = new Object(new Model(Cube, 20 * (3 + 3), 6, 3, 2, GL_TRIANGLE_STRIP), phongShader);
-
+/*
 	FactoryObject* factoryO = new FactoryObject();
 	FactoryModel* factoryM = new FactoryModel();
-
+*/
 
 	Camera* camera = new Camera(window->getWidth(), window->getHeight(), glm::vec3(0.0f, 0.0f, 8.0f));
 	camera->registerObserver(defaultShader);
@@ -127,7 +147,7 @@ void Engine::startRendering() {
 // BUILDING SCENE
 	Object* building = factoryO->newObject(factoryM->newModel("house"), lightShader);
 	Object* zombie = factoryO->newObject(factoryM->newModel("zombie"), lightShader);
-
+	Object* plainGrass = factoryO->newObject(factoryM->newModel("plainGrass"), lightShader);
 
 	Scene* sceneBall = new Scene(sceneCount);
 	sceneCount++;
@@ -191,8 +211,10 @@ void Engine::startRendering() {
 	Scene* houseScene = new Scene(sceneCount);
 	sceneCount++;
 	houseScene->addCamera(camera);
+	houseScene->addObject(plainGrass);
 	houseScene->addObject(building);
 	houseScene->addObject(zombie);
+	houseScene->setSkybox(skybox);
 	houseScene->setDirLight(DirectionalLight(glm::vec3(.0f, -1.f, 1.f)));
 	vecScenes.push_back(houseScene);
 
@@ -249,6 +271,8 @@ void Engine::startRendering() {
 
 	scene = vecScenes.at(0);
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_STENCIL_TEST);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
 	scene->getCurrentCam()->notify();
 	while (!glfwWindowShouldClose(this->window->getGLFWWindow())) 
@@ -257,6 +281,7 @@ void Engine::startRendering() {
 
 		// clear color and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		//scene->getCurrentCam()->UpdateShader(shader->getShader());
 		scene->draw();
@@ -287,6 +312,14 @@ Window* Engine::getWindow()
 	return this->window;
 }
 
+GLint Engine::getIndex() 
+{
+	GLint index = objectCounter;
+	objectCounter++;
+	return index;
+}
+
+
 void Engine::nextScene() 
 {
 	GLint nextScene = this->scene->sceneCount + 1;
@@ -315,6 +348,45 @@ void Engine::onClick(int button, int action, double x, double y)
 	if (action == GLFW_RELEASE) {
 		printf("release %d %d %f %f\n", button, action, x, y);
 	}
+
+	if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_LEFT )
+	{
+		//read data from frame buffer
+		GLbyte color[4];
+		GLfloat depth;
+		GLuint index; // identifikace telesa
+
+
+		int newy = window->getHeight() - y;
+
+		glReadPixels(x, newy, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, color);
+		glReadPixels(x, newy, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
+		glReadPixels(x, newy, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
+
+		printf("Clicked on pixel %d, %d, color %02hhx%02hhx%02hhx%02hhx, depth %f, stencil index %u\n",
+			x, y, color[0], color[1], color[2], color[3], depth, index);
+		glm::vec3 screenX = glm::vec3(x, newy, depth);
+		glm::mat4 view = this->scene->getCurrentCam()->viewMat;
+		glm::mat4 projection = this->scene->getCurrentCam()->projMat;
+		glm::vec4 viewPort = glm::vec4(0, 0, window->getWidth(), window->getHeight());
+		glm::vec3 pos = glm::unProject(screenX, view, projection, viewPort);
+
+		printf("unProject [%f,%f,%f]\n", pos.x, pos.y, pos.z);
+		/*
+		if ((glfwGetKey(window->getGLFWWindow(), GLFW_KEY_C) == GLFW_PRESS) && index != 0) {
+			Object* toAdd = new Object(am->getModelByName("texturedTree1"), am->getShaderByName("lights"));
+			MatrixHandler::translate(toAdd->getMatRef(), glm::vec3(pos.x, pos.y, pos.z));
+			MatrixHandler::scale(toAdd->getMatRef(), glm::vec3(.5f, .5f, .5f));
+			this->currentScene->addObject(toAdd);
+
+		}*/
+		Object* addingTree = factoryO->newObject(factoryM->newModel("addingTree"), shader);
+		Transformation::translate(addingTree->getMatrix(), glm::vec3(pos.x, pos.y, pos.z));
+		Transformation::scale(addingTree->getMatrix(), glm::vec3(.3f, .3f, .3f));
+		this->scene->addObject(addingTree);
+	}
+
+
 	return;
 }
 
@@ -353,20 +425,6 @@ void Engine::onMove(double x, double y)
 	}
 }
 
-Engine::Engine() 
-{
-	init();
-}
-
-Engine* Engine::getInstance()
-{
-	if (instance == 0)
-	{
-		instance = new Engine();
-	}
-
-	return instance;
-}
 
 void Engine::processHeldKeys()
 {

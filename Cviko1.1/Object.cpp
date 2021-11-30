@@ -4,12 +4,13 @@ Object::Object(){
 }
 
 
-Object::Object(Model* model, Shader* shader)
+Object::Object(Model* model, Shader* shader, GLint objectID)
 {
 	this->model = model;
 	this->shader = shader;
 	this->transMat = glm::mat4(1.0f);
 	this->idModelTransform = glGetUniformLocation(this->shader->getShader(), "modelMatrix");
+	this->objectID = objectID;
 
 }
 // nastavi shader, shaderu se hodi trans matice
@@ -36,6 +37,11 @@ Shader* Object::getShader()
 glm::mat4* Object::getMatrix()
 {
 	return &this->transMat;
+}
+
+GLint Object::getObjectID()
+{
+	return this->objectID;
 }
 
 

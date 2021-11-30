@@ -62,6 +62,25 @@ Model* FactoryModel::newModel(string modelTitle)
 
 		return model;
 	}
+	else if (modelTitle == "addingTree")
+	{
+		Model* model = Model::create("./Models/tree.obj").positionAttrib(0).normalAttrib(3).texAttrib(6).build();
+
+		Texture* textureTree = new Texture("./Texture/tree.png", 0);
+		model->setTexture(textureTree);
+
+		return model;
+	}
+	else if (modelTitle == "plainGrass")
+	{
+		Model* model = Model::create("./Models/teren.obj").positionAttrib(0).normalAttrib(3).texAttrib(6).build();
+
+		Texture* textureGrass = new Texture("./Texture/grass.png", 0);
+		model->setTexture(textureGrass);
+
+		return model;
+	}
+
 
 	else if (modelTitle == "tree")
 		//return new Model(tree_plain, 92814 * (3 + 3), 6);

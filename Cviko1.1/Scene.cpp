@@ -86,6 +86,8 @@ void Scene::draw()
 
 		glUniform3fv(element->getShader()->getUniform("lightPos"), 1, glm::value_ptr(this->lightPosition));
 
+		glStencilFunc(GL_ALWAYS, element->getObjectID(), 0xFF);  //identifikace tìles
+
 		element->draw();
 		//Transformation::rotate(element->getMatrix(), 0.02f, glm::vec3(0.0f, 1.0f, 0.0f));
 

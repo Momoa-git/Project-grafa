@@ -54,7 +54,8 @@ Model::Model(const char* modelData) {
 	if (scene) {
 		aiMesh* mesh = scene->mMeshes[0];
 		count = mesh->mNumFaces * 3;
-		for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
+		for (unsigned int i = 0; i < mesh->mNumFaces; i++) 
+		{
 			for (unsigned int j = 0; j < 3; j++)
 			{
 				data.push_back(mesh->mVertices[mesh->mFaces[i].mIndices[j]].x);

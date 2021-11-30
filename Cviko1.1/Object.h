@@ -15,15 +15,17 @@ private:
 	glm::mat4 transMat;
 	GLint idModelTransform;
 	Model* model;
+	GLint objectID;
 
 public:
 	Object();
-	Object(Model* model, Shader* shader);
+	Object(Model* model, Shader* shader, GLint objectID = 0);
 	
 	virtual void draw() override;
 	Shader* getShader();
 	//void draw();
 	glm::mat4* getMatrix();
+	GLint getObjectID();
 
 
 };

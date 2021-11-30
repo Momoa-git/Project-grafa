@@ -18,6 +18,7 @@ private:
 
 public:
 	Scene* scene;
+	Shader* shader;
 	void init();
 
 	void startRendering();
@@ -27,6 +28,7 @@ public:
 	void onClick(int button, int action, double x, double y);
 	void nextScene();
 	void previousScene();
+	GLint getIndex();
 
 	void processHeldKeys();
 
