@@ -9,7 +9,8 @@ Object::Object(Model* model, Shader* shader, GLint objectID)
 	this->model = model;
 	this->shader = shader;
 	this->transMat = glm::mat4(1.0f);
-	this->idModelTransform = glGetUniformLocation(this->shader->getShader(), "modelMatrix");
+	//this->idModelTransform = glGetUniformLocation(this->shader->getShader(), "modelMatrix");
+	this->idModelTransform = this->shader->getUniform("modelMatrix");
 	this->objectID = objectID;
 
 }

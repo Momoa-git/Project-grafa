@@ -2,7 +2,7 @@
 
 Shader::Shader(const char* vertex_shader, const char* fragment_shader) 
 {
-	ShaderLoader shaderLoader = ShaderLoader(vertex_shader, fragment_shader, &this->shader);
+	this->shader = loadShader(vertex_shader, fragment_shader);
 
 }
 

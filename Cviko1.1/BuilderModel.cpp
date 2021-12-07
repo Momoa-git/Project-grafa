@@ -1,4 +1,5 @@
 #include "BuilderModel.h"
+BuilderModel::BuilderModel() {};
 BuilderModel::BuilderModel(const GLfloat* points, int pointNo, int lineLen) {
 	this->model = new Model(points, pointNo, lineLen);
 }
@@ -25,7 +26,7 @@ BuilderModel BuilderModel::texAttrib(GLint at) {
 	this->model->vao->setAttribute(*this->model->vbo, 3, 2, GL_FLOAT, this->model->lineLen * sizeof(GL_FLOAT), (GLvoid*)(at * sizeof(GL_FLOAT)));
 	this->model->vao->ResetBindBuffer();
 	return *this;
-}
+}/*
 BuilderModel BuilderModel::colorAttrib(GLint at, GLboolean alpha) {
 	this->model->vao->BindBuffer();
 	GLint componentNo;
@@ -36,7 +37,7 @@ BuilderModel BuilderModel::colorAttrib(GLint at, GLboolean alpha) {
 	this->model->vao->setAttribute(*this->model->vbo, 2, componentNo, GL_FLOAT, this->model->lineLen * sizeof(GL_FLOAT), (GLvoid*)(at * sizeof(GL_FLOAT)));
 	this->model->vao->ResetBindBuffer();
 	return *this;
-}
+}*/
 Model* BuilderModel::build() {
 	this->model->vao->ResetBindBuffer();
 	this->model->vbo->ResetBindBuffer();

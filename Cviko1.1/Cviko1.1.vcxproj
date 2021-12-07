@@ -172,7 +172,6 @@
     <ClInclude Include="Models\Tree.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Observer.h" />
-    <ClInclude Include="ObserverDrawable.h" />
     <ClInclude Include="ObserverSkyBox.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />

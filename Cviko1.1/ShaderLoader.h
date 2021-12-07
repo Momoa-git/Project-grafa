@@ -12,18 +12,19 @@ using namespace std;
 
 class ShaderLoader 
 {
+private:
 	GLuint fragmentID;
 	GLuint vertexID;
 
 	string openFile(const char* name);
-protected:
-	GLuint shaderProgramID = 0;
+
+	GLuint shaderID = 0;
 
 public:
-	ShaderLoader(const char* vertexFileName, const char* fragmentFileName, GLuint* shaderID);
+	ShaderLoader();
 	~ShaderLoader();
 	GLuint loadShader(const char* vertexFileName, const char* fragmentFileName);
-	ShaderLoader();
+	
 
 
 

@@ -5,6 +5,10 @@
 #include "Shader.h"
 
 class Texture {
+private:
+	GLuint textureID;
+	int index;
+
 public: 
 	Texture();
 	Texture(const char* path, int index);
@@ -12,7 +16,4 @@ public:
 	void useTexture(Shader* shader);
 
 
-private:
-	GLuint textureID;
-	int index;
 };

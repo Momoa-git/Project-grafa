@@ -176,9 +176,6 @@
     <ClInclude Include="SkyBox.h">
       <Filter>Hlavičkové soubory</Filter>
     </ClInclude>
-    <ClInclude Include="ObserverDrawable.h">
-      <Filter>Hlavičkové soubory</Filter>
-    </ClInclude>
     <ClInclude Include="Lights\PointLight.h">
       <Filter>Hlavičkové soubory</Filter>
     </ClInclude>

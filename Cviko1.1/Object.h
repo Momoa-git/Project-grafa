@@ -7,9 +7,9 @@
 
 #include "Shader.h"
 #include "Model.h"
-#include "ObserverDrawable.h"
+//#include "ObserverDrawable.h"
 
-class Object : public ObserverDrawable{
+class Object{
 private:
 	Shader* shader;
 	glm::mat4 transMat;
@@ -21,9 +21,9 @@ public:
 	Object();
 	Object(Model* model, Shader* shader, GLint objectID = 0);
 	
-	virtual void draw() override;
+	//virtual void draw() override;
 	Shader* getShader();
-	//void draw();
+	void draw();
 	glm::mat4* getMatrix();
 	GLint getObjectID();
 

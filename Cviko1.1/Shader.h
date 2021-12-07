@@ -13,7 +13,7 @@
 #include "Observer.h"
 #include "ShaderLoader.h"
 
-class Shader : public Observer{
+class Shader : public ShaderLoader, public Observer{
 private:
 	GLuint shader;
     glm::mat4 viewMat;

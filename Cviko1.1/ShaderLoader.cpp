@@ -1,10 +1,5 @@
 #include "ShaderLoader.h"
 
-ShaderLoader::ShaderLoader(const char* vertexFileName, const char* fragmentFileName, GLuint* shaderID)
-{
-	*shaderID = loadShader(vertexFileName, fragmentFileName);
-
-}
 ShaderLoader::ShaderLoader()
 {
 
@@ -75,25 +70,25 @@ GLuint ShaderLoader::loadShader(const char* vertexFileName, const char* fragment
 		delete[] strInfoLog;
 	}
 
-	shaderProgramID = glCreateProgram();
-	glAttachShader(shaderProgramID, vertexID);
-	glAttachShader(shaderProgramID, fragmentID);
-	glLinkProgram(shaderProgramID);
+	shaderID = glCreateProgram();
+	glAttachShader(shaderID, vertexID);
+	glAttachShader(shaderID, fragmentID);
+	glLinkProgram(shaderID);
 
-	glGetProgramiv(shaderProgramID, GL_LINK_STATUS, &status);
+	glGetProgramiv(shaderID, GL_LINK_STATUS, &status);
 	if (status == GL_FALSE)
 	{
 		GLint infoLogLength;
-		glGetProgramiv(shaderProgramID, GL_INFO_LOG_LENGTH, &infoLogLength);
+		glGetProgramiv(shaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
 
 		GLchar* strInfoLog = new GLchar[infoLogLength + 1];
-		glGetProgramInfoLog(shaderProgramID, infoLogLength, NULL, strInfoLog);
+		glGetProgramInfoLog(shaderID, infoLogLength, NULL, strInfoLog);
 		fprintf(stderr, "Linker failure: %s\n", strInfoLog);
 		delete[] strInfoLog;
 	}
 	else printf(" Shader:Load OK \n");
 
-	return shaderProgramID;
+	return shaderID;
 
 
 

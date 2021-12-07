@@ -2,6 +2,7 @@
 
 struct DirLight {
     vec3 direction;
+ //Base
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
@@ -9,11 +10,11 @@ struct DirLight {
 
 struct PointLight {    
     vec3 position;
-    
+ //Attenuation   
     float constant;
     float linear;
     float quadratic;  
-
+//Base
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
@@ -24,11 +25,11 @@ struct SpotLight {
     vec3 direction;
     float cutOff;
     float outerCutOff;
-
+ //Attenuation  
     float constant;
     float linear;
     float quadratic;
-
+//Base
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;       
@@ -56,7 +57,7 @@ uniform int spotLightsCount;
 out vec4 out_Color;
 
 
-vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
+vec3 CalculatePointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
     vec3 toLightVector = normalize(light.position - fragPos);
     // diffuse shading
@@ -75,7 +76,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     return (ambient + diffuse + specular) * attenuation;
 } 
 
-vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
+vec3 CalculateDirLight(DirLight light, vec3 normal, vec3 viewDir)
 {
     vec3 toLightVector = normalize(-light.direction);
     // diffuse shading
@@ -90,7 +91,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     return (vec3(texture(textureUnitID, ex_uv)) * ((ambient) + (diffuse)) + (specular));
 }  
 
-vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
+vec3 CalculateSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
     vec3 toLightVector = normalize(light.position - fragPos);
     // diffuse shading
@@ -120,15 +121,15 @@ void main()
   vec3 viewDirection = normalize(cameraPos - ex_worldPosition.xyz);
 
    // add the directional light's contribution to the base
-  base += CalcDirLight(dirLight, ex_worldNormal, viewDirection);
+  base += CalculateDirLight(dirLight, ex_worldNormal, viewDirection);
   
   // do the same for all point lights
   for(int i = 0; i < pointLightsCount; i++)
-  	base += CalcPointLight(pointLights[i], ex_worldNormal, ex_worldPosition.xyz, viewDirection);
+  	base += CalculatePointLight(pointLights[i], ex_worldNormal, ex_worldPosition.xyz, viewDirection);
  
   // and add others lights as well (like spotlights)
   for(int i = 0; i < spotLightsCount; i++)
-    base += CalcSpotLight(spotLights[i], ex_worldNormal, ex_worldPosition.xyz, viewDirection);
+    base += CalculateSpotLight(spotLights[i], ex_worldNormal, ex_worldPosition.xyz, viewDirection);
   
   out_Color = vec4(base, 1.0);
 } 

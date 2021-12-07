@@ -7,15 +7,15 @@ Camera::Camera(int width, int height, glm::vec3 position)
 	this->position = position;
 	bias = -90.0f;
 	pitch = 0.0f;
-	movementSpeed = 0.1f;
+	speed = 0.1f;
 	viewMat = glm::lookAt(position, position + orientation, WorldUp);
 	projMat = glm::perspective(glm::radians(45.0f), (float)width / height, 0.1f, 100.0f);
 	calcOrientation();
 }
 
-void Camera::updateShader(GLuint shaderProg) {
-	GLint idViewMat = glGetUniformLocation(shaderProg, "viewMatrix");
-	GLint idProjMat = glGetUniformLocation(shaderProg, "projectionMatrix");
+void Camera::updateShader(GLuint shader) {
+	GLint idViewMat = glGetUniformLocation(shader, "viewMatrix");
+	GLint idProjMat = glGetUniformLocation(shader, "projectionMatrix");
 
 	glUniformMatrix4fv(idViewMat, 1, GL_FALSE, &viewMat[0][0]);
 	glUniformMatrix4fv(idProjMat, 1, GL_FALSE, &projMat[0][0]);
@@ -37,7 +37,7 @@ void Camera::calcView() {
 	notify();
 }
 void Camera::move(Camera_Movement direction) {
-	GLfloat velocity = movementSpeed;
+	GLfloat velocity = speed;
 	printf("direction %d\n", direction);
 
 	switch (direction) {

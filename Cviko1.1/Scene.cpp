@@ -97,7 +97,7 @@ Camera* Scene::getCurrentCam()
 {
 	return this->currentCam;
 }
-// 
+
 void Scene::addCamera(Camera* cam, GLboolean setCurrent) 
 {
 	cameras.push_back(cam);
@@ -127,11 +127,7 @@ void Scene::setDirLight(DirectionalLight dr)
 {
 	this->dirLight = dr;
 }
-/*
-void Scene::setSpotLight(SpotLight sl)
-{
-	this->spotLight = sl;
-}*/
+
 
 void Scene::setSkybox(SkyBox* skybox)
 {

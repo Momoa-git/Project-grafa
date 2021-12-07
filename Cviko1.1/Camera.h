@@ -31,7 +31,7 @@ public:
 	glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
 	glm::mat4 viewMat;
 	glm::mat4 projMat;
-	GLfloat movementSpeed;
+	GLfloat speed;
 	GLfloat sensitivity = 0.04f;
 	GLfloat pitch;
 	GLfloat bias;
@@ -39,7 +39,7 @@ public:
 	// Camera constructor to set up initial values
 	Camera(int width, int height, glm::vec3 position);
 
-	void updateShader(GLuint shaderProg);
+	void updateShader(GLuint shader);
 	void calcOrientation();
 	void calcView();
 	void move(Camera_Movement direction);
