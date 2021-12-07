@@ -17,6 +17,7 @@ GLint objectCounter = 1;
 
 FactoryObject* factoryO = new FactoryObject();
 FactoryModel* factoryM = new FactoryModel();
+GLboolean camMove = false;
 
 
 Engine::Engine()
@@ -61,6 +62,8 @@ void Engine::startRendering() {
 
 	int sceneCount = 0;
 
+	this->modelManager = ModelManager::getInstance();
+
 	Shader* defaultShader = new Shader("vertex_shader.vec", "fragment_shader.frag");
 	Shader* constShader = new Shader("vertex_shader_const.vec", "fragment_shader_const.frag");
 	Shader* lambertShader = new Shader("vertex_shader_lambert.vec", "fragment_shader_lambert.frag");
@@ -85,7 +88,10 @@ void Engine::startRendering() {
 	camera->registerObserver(phongTextureShader);
 	camera->registerObserver(textureShader);
 	camera->registerObserver(lightShader);
+	this->modelManager->saveShader(lightShader, "light");
 
+	//Object* addingTree = factoryO->newObject(factoryM->newModel("addingTree"), shader);
+	modelManager->saveModel(factoryM->newModel("addingTree"), "addingTree");
 
 // SCENE BALL
 
@@ -107,6 +113,7 @@ void Engine::startRendering() {
 
 	Object* tree = factoryO->newObject(factoryM->newModel("tree"), phongShader);
 	Transformation::translate(tree->getMatrix(), glm::vec3(3.0f, 0.0f, -7.0f));
+
 	Object* tree2 = factoryO->newObject(factoryM->newModel("tree"), phongShader);
 	Transformation::translate(tree2->getMatrix(), glm::vec3(7.0f, 0.0f, -5.0f));
 	Object* tree3 = factoryO->newObject(factoryM->newModel("tree"), phongShader);
@@ -349,7 +356,16 @@ void Engine::onClick(int button, int action, double x, double y)
 		printf("release %d %d %f %f\n", button, action, x, y);
 	}
 
-	if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_LEFT )
+	if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_RIGHT) {
+		camMove = true;
+		glfwSetInputMode(window->getGLFWWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	}
+	if (action == GLFW_RELEASE && button == GLFW_MOUSE_BUTTON_RIGHT) {
+		camMove = false;
+		glfwSetInputMode(window->getGLFWWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
+
+	if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_LEFT && !camMove)
 	{
 		//read data from frame buffer
 		GLbyte color[4];
@@ -380,10 +396,12 @@ void Engine::onClick(int button, int action, double x, double y)
 			this->currentScene->addObject(toAdd);
 
 		}*/
-		Object* addingTree = factoryO->newObject(factoryM->newModel("addingTree"), shader);
-		Transformation::translate(addingTree->getMatrix(), glm::vec3(pos.x, pos.y, pos.z));
-		Transformation::scale(addingTree->getMatrix(), glm::vec3(.3f, .3f, .3f));
-		this->scene->addObject(addingTree);
+		
+			Object* toAdd = new Object(modelManager->getModel("addingTree"),modelManager->getShader("light"));
+			Transformation::translate(toAdd->getMatrix(), glm::vec3(pos.x, pos.y, pos.z));
+			Transformation::scale(toAdd->getMatrix(), glm::vec3(.3f, .3f, .3f));
+			this->scene->addObject(toAdd);
+		
 	}
 
 

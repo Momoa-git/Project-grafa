@@ -7,18 +7,20 @@
 #include <assimp/postprocess.h>
 #include "Window.h"
 #include "Scene.h"
+#include "ModelManager.h"
 
 class Engine {
 private:
 	Window* window;
 	static Engine* instance;
 	std::vector <Scene*> vecScenes;
-//	Scene* scene;
+	ModelManager* modelManager;
 	Engine();
 
 public:
 	Scene* scene;
 	Shader* shader;
+
 	void init();
 
 	void startRendering();
