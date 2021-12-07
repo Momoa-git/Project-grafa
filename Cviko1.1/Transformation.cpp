@@ -14,3 +14,8 @@ void Transformation::translate(glm::mat4x4* transMat, glm::vec3 transVec)
 {
 	*transMat = glm::translate(*transMat, transVec);
 }
+
+void Transformation::resetMat(glm::mat4x4* transMat)
+{
+	*transMat = glm::mat4(1.0f);
+}

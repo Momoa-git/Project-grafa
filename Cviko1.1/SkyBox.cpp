@@ -4,7 +4,7 @@
 
 SkyBox::SkyBox(Shader* shader) 
 {
-	initialised = 0;
+	//initialised = 0;
 
 	Model* bottom = Model::create(plain_texture, 6, 8).positionAttrib(0).texAttrib(6).build();
 	Texture* tex1 = new Texture("./Texture/cubemap/negy.jpg", 0);
@@ -60,77 +60,54 @@ void SkyBox::draw() {
 	for (int i = 0; i < 6; i++) {
 		this->sides[i].draw();
 	}
-	glClear(GL_DEPTH_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
 void SkyBox::update(glm::vec3 position) {
-	if (!initialised) {
+	//if (!initialised) {
 		this->position = position;
 
-		Transformation::rotate((&this->sides[0])->getMatrix(), glm::radians(90.f), glm::vec3(0.0f, 1.f, .0f));
+		for (int i = 0; i < 6; i++)
+		{
+			//(&this->sides[i])->getMatrix() = glm::mat4(1.0);
+			Transformation::resetMat((&this->sides[i])->getMatrix());
+		}
+
+		//Transformation::rotate((&this->sides[0])->getMatrix(), glm::radians(90.f), glm::vec3(0.0f, 1.f, .0f));
 		Transformation::translate((&this->sides[0])->getMatrix(), position);
+		Transformation::translate((&this->sides[0])->getMatrix(), glm::vec3(0.0f, -1.0f, .0f));
 		Transformation::rotate((&this->sides[0])->getMatrix(), glm::radians(-90.f), glm::vec3(0.0f, 1.f, .0f));
 
-		Transformation::rotate((&this->sides[1])->getMatrix(), glm::radians(90.f), glm::vec3(0.0f, 1.f, .0f));
+		//Transformation::rotate((&this->sides[1])->getMatrix(), glm::radians(90.f), glm::vec3(0.0f, 1.f, .0f));
 		Transformation::translate((&this->sides[1])->getMatrix(), position);
+		Transformation::translate((&this->sides[1])->getMatrix(), glm::vec3(0.0f, 1.0f, .0f));
 		Transformation::rotate((&this->sides[1])->getMatrix(), glm::radians(-90.f), glm::vec3(0.0f, 1.f, .0f));
 
-		Transformation::rotate((&this->sides[2])->getMatrix(), glm::radians(90.f), glm::vec3(0.0f, .0f, -1.0f));
-		Transformation::rotate((&this->sides[2])->getMatrix(), glm::radians(-180.f), glm::vec3(1.0f, .0f, .0f));
+		//Transformation::rotate((&this->sides[2])->getMatrix(), glm::radians(90.f), glm::vec3(0.0f, .0f, -1.0f));
+		//Transformation::rotate((&this->sides[2])->getMatrix(), glm::radians(-180.f), glm::vec3(1.0f, .0f, .0f));
 		Transformation::translate((&this->sides[2])->getMatrix(), position);
+		Transformation::translate((&this->sides[2])->getMatrix(), glm::vec3(-1.0f, .0f, .0f));
 		Transformation::rotate((&this->sides[2])->getMatrix(), glm::radians(180.f), glm::vec3(1.0f, .0f, .0f));
 		Transformation::rotate((&this->sides[2])->getMatrix(), glm::radians(-90.f), glm::vec3(0.0f, .0f, -1.0f));
 
-		Transformation::rotate((&this->sides[3])->getMatrix(), glm::radians(-90.f), glm::vec3(0.0f, .0f, -1.0f));
+		//Transformation::rotate((&this->sides[3])->getMatrix(), glm::radians(-90.f), glm::vec3(0.0f, .0f, -1.0f));
 		Transformation::translate((&this->sides[3])->getMatrix(), position);
+		Transformation::translate((&this->sides[3])->getMatrix(), glm::vec3(1.0f, .0f, .0f));
 		Transformation::rotate((&this->sides[3])->getMatrix(), glm::radians(90.f), glm::vec3(0.0f, .0f, -1.0f));
 
-		Transformation::rotate((&this->sides[4])->getMatrix(), glm::radians(90.f), glm::vec3(.0f, .0f, 1.0f));
-		Transformation::rotate((&this->sides[4])->getMatrix(), glm::radians(-90.f), glm::vec3(0.0f, 1.0f, .0f));
+		//Transformation::rotate((&this->sides[4])->getMatrix(), glm::radians(90.f), glm::vec3(.0f, .0f, 1.0f));
+		//Transformation::rotate((&this->sides[4])->getMatrix(), glm::radians(-90.f), glm::vec3(0.0f, 1.0f, .0f));
 		Transformation::translate((&this->sides[4])->getMatrix(), position);
+		Transformation::translate((&this->sides[4])->getMatrix(), glm::vec3(.0f, .0f, -1.0f));
 		Transformation::rotate((&this->sides[4])->getMatrix(), glm::radians(90.f), glm::vec3(0.0f, 1.0f, .0f));
 		Transformation::rotate((&this->sides[4])->getMatrix(), glm::radians(-90.f), glm::vec3(.0f, .0f, 1.0f));
 
-		Transformation::rotate((&this->sides[5])->getMatrix(), glm::radians(90.f), glm::vec3(0.0f, 1.0f, .0f));
-		Transformation::rotate((&this->sides[5])->getMatrix(), glm::radians(-90.f), glm::vec3(1.0f, .0f, .0f));
+	//	Transformation::rotate((&this->sides[5])->getMatrix(), glm::radians(90.f), glm::vec3(0.0f, 1.0f, .0f));
+		//Transformation::rotate((&this->sides[5])->getMatrix(), glm::radians(-90.f), glm::vec3(1.0f, .0f, .0f));
 		Transformation::translate((&this->sides[5])->getMatrix(), position);
+		Transformation::translate((&this->sides[5])->getMatrix(), glm::vec3(.0f, .0f, 1.0f));
 		Transformation::rotate((&this->sides[5])->getMatrix(), glm::radians(90.f), glm::vec3(1.0f, .0f, .0f));
 		Transformation::rotate((&this->sides[5])->getMatrix(), glm::radians(-90.f), glm::vec3(0.0f, 1.0f, .0f));
 
-		this->initialised = 1;
-	}
-
-	else {
-		Transformation::rotate((&this->sides[0])->getMatrix(), glm::radians(90.f), glm::vec3(0.0f, 1.f, .0f));
-		Transformation::translate((&this->sides[0])->getMatrix(), position - this->position);
-		Transformation::rotate((&this->sides[0])->getMatrix(), glm::radians(-90.f), glm::vec3(0.0f, 1.f, .0f));
-
-		Transformation::rotate((&this->sides[1])->getMatrix(), glm::radians(90.f), glm::vec3(0.0f, 1.f, .0f));
-		Transformation::translate((&this->sides[1])->getMatrix(), position - this->position);
-		Transformation::rotate((&this->sides[1])->getMatrix(), glm::radians(-90.f), glm::vec3(0.0f, 1.f, .0f));
-
-		Transformation::rotate((&this->sides[2])->getMatrix(), glm::radians(90.f), glm::vec3(0.0f, .0f, -1.0f));
-		Transformation::rotate((&this->sides[2])->getMatrix(), glm::radians(-180.f), glm::vec3(1.0f, .0f, .0f));
-		Transformation::translate((&this->sides[2])->getMatrix(), position - this->position);
-		Transformation::rotate((&this->sides[2])->getMatrix(), glm::radians(180.f), glm::vec3(1.0f, .0f, .0f));
-		Transformation::rotate((&this->sides[2])->getMatrix(), glm::radians(-90.f), glm::vec3(0.0f, .0f, -1.0f));
-
-		Transformation::rotate((&this->sides[3])->getMatrix(), glm::radians(-90.f), glm::vec3(0.0f, .0f, -1.0f));
-		Transformation::translate((&this->sides[3])->getMatrix(), position - this->position);
-		Transformation::rotate((&this->sides[3])->getMatrix(), glm::radians(90.f), glm::vec3(0.0f, .0f, -1.0f));
-
-		Transformation::rotate((&this->sides[4])->getMatrix(), glm::radians(90.f), glm::vec3(.0f, .0f, 1.0f));
-		Transformation::rotate((&this->sides[4])->getMatrix(), glm::radians(-90.f), glm::vec3(0.0f, 1.0f, .0f));
-		Transformation::translate((&this->sides[4])->getMatrix(), position - this->position);
-		Transformation::rotate((&this->sides[4])->getMatrix(), glm::radians(90.f), glm::vec3(0.0f, 1.0f, .0f));
-		Transformation::rotate((&this->sides[4])->getMatrix(), glm::radians(-90.f), glm::vec3(.0f, .0f, 1.0f));
-
-		Transformation::rotate((&this->sides[5])->getMatrix(), glm::radians(90.f), glm::vec3(0.0f, 1.0f, .0f));
-		Transformation::rotate((&this->sides[5])->getMatrix(), glm::radians(-90.f), glm::vec3(1.0f, .0f, .0f));
-		Transformation::translate((&this->sides[5])->getMatrix(), position - this->position);
-		Transformation::rotate((&this->sides[5])->getMatrix(), glm::radians(90.f), glm::vec3(1.0f, .0f, .0f));
-		Transformation::rotate((&this->sides[5])->getMatrix(), glm::radians(-90.f), glm::vec3(0.0f, 1.0f, .0f));
-
-		this->position = position;
-	}
+	
 }

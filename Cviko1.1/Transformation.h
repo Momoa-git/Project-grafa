@@ -15,5 +15,6 @@ public:
 	static void rotate(glm::mat4x4* transMat, float angle, glm::vec3 axis);
 	static void scale(glm::mat4x4* transMat, glm::vec3 scaleVec);
 	static void translate(glm::mat4x4* transMat, glm::vec3 transVec);
+	static void resetMat(glm::mat4x4* transMat);
 
 };
