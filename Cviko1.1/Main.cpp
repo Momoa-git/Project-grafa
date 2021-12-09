@@ -47,6 +47,8 @@ int main(void)
 	
 
 	Engine* engine = Engine::getInstance();
+	engine->getInstanceManagers();
+	engine->initShaders();
 	engine->startRendering();
 
 

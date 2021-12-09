@@ -21,10 +21,11 @@ private:
 
 public:
 	Scene* scene;
-	Shader* shader;
 
 	void init();
 
+	void getInstanceManagers();
+	void initShaders();
 	void startRendering();
 
 	void onKey(int key, int scancode, int action, int mods);

@@ -10,6 +10,7 @@
 #include "ShaderLoader.h"
 #include "FactoryModel.h"
 #include "FactoryObject.h"
+#include "MovingObject.h"
 
 
 Engine* Engine::instance = 0;
@@ -57,13 +58,15 @@ void Engine::init() {
 	printf("Using GLFW %i.%i.%i\n", major, minor, revision);
 }
 
-void Engine::startRendering() {
-
-	int sceneCount = 0;
-
+void Engine::getInstanceManagers()
+{
 	this->modelManager = ModelManager::getInstance();
 	this->shaderManager = ShaderManager::getInstance();
+}
 
+
+void Engine::initShaders()
+{ 
 	Shader* defaultShader = new Shader("vertex_shader.vec", "fragment_shader.frag");
 	Shader* constShader = new Shader("vertex_shader_const.vec", "fragment_shader_const.frag");
 	Shader* lambertShader = new Shader("vertex_shader_lambert.vec", "fragment_shader_lambert.frag");
@@ -72,41 +75,41 @@ void Engine::startRendering() {
 	Shader* textureShader = new Shader("vertex_shader_texture.vec", "fragment_shader_texture.frag");
 	Shader* lightShader = new Shader("vertex_shader_light.vec", "fragment_shader_light.frag");
 
-	//this->shader = lightShader;
-
-	//Object* cube = new Object(new Model(Cube, 20 * (3 + 3), 6, 3, 2, GL_TRIANGLE_STRIP), phongShader);
-
-	
-
-
-
 	this->shaderManager->saveShader(defaultShader, "default");
 	this->shaderManager->saveShader(constShader, "const");
+	this->shaderManager->saveShader(lambertShader, "lambert");
 	this->shaderManager->saveShader(phongShader, "phong");
 	this->shaderManager->saveShader(phongTextureShader, "phong-texture");
 	this->shaderManager->saveShader(textureShader, "texture");
 	this->shaderManager->saveShader(lightShader, "light");
+	
+}
 
+
+
+void Engine::startRendering() {
+
+	int sceneCount = 0;
+	
 	Camera* camera = new Camera(window->getWidth(), window->getHeight(), glm::vec3(0.0f, 0.0f, 8.0f));
-	camera->registerObserver(defaultShader);
-	camera->registerObserver(constShader);
-	camera->registerObserver(lambertShader);
-	camera->registerObserver(phongShader);
-	camera->registerObserver(phongTextureShader);
-	camera->registerObserver(textureShader);
-	camera->registerObserver(lightShader);
+	camera->registerObserver(shaderManager->getShader("default"));
+	camera->registerObserver(shaderManager->getShader("const"));
+	camera->registerObserver(shaderManager->getShader("lambert"));
+	camera->registerObserver(shaderManager->getShader("phong"));
+	camera->registerObserver(shaderManager->getShader("phong-texture"));
+	camera->registerObserver(shaderManager->getShader("texture"));
+	camera->registerObserver(shaderManager->getShader("light"));
 
 	
 	FactoryObject* factoryO = new FactoryObject();
 	FactoryModel* factoryM = new FactoryModel();
 
 
-	//Object* addingTree = factoryO->newObject(factoryM->newModel("addingTree"), shader);
 	modelManager->saveModel(factoryM->newModel("addingTree"), "addingTree");
 
 // SCENE BALL
 
-	SkyBox* skybox = new SkyBox(textureShader);
+	SkyBox* skybox = new SkyBox(shaderManager->getShader("texture"));
 	
 	Object* ball_R = factoryO->newObject(factoryM->newModel("sphere"), shaderManager->getShader("phong"));
 	Object* ball_L = factoryO->newObject(factoryM->newModel("sphere"), shaderManager->getShader("phong"));
@@ -140,8 +143,6 @@ void Engine::startRendering() {
 	Object* tree8 = factoryO->newObject(factoryM->newModel("tree"), shaderManager->getShader("phong"));
 	Transformation::translate(tree8->getMatrix(), glm::vec3(11.0f, 0.0f, -3.0f));
 
-
-
 	Object* bushes1 = factoryO->newObject(factoryM->newModel("bushes"), shaderManager->getShader("phong"));
 	Transformation::translate(bushes1->getMatrix(), glm::vec3(1.0f, 0.0f, -2.0f));
 	Transformation::scale(bushes1->getMatrix(), glm::vec3(1.0f, 1.0f, 1.0f));
@@ -158,14 +159,18 @@ void Engine::startRendering() {
 
 // LIGHTS SCENE
 	Object* plainLight = factoryO->newObject(factoryM->newModel("plainTexture"), shaderManager->getShader("light"));
-	//Transformation::rotate(plainLight->getMatrix(), 0.02f, glm::vec3(1.0f, 0.0f, 0.0f));
 	Transformation::translate(plainLight->getMatrix(), glm::vec3(7.0f, 0.0f, -11.0f));
 	Transformation::scale(plainLight->getMatrix(), glm::vec3(20.0f, 10.0f, 20.0f));
     
 // BUILDING SCENE
 	Object* building = factoryO->newObject(factoryM->newModel("house"), shaderManager->getShader("light"));
-	Object* zombie = factoryO->newObject(factoryM->newModel("zombie"), shaderManager->getShader("light"));
 	Object* plainGrass = factoryO->newObject(factoryM->newModel("plainGrass"), shaderManager->getShader("light"));
+
+	MovingObject* zombie = new MovingObject(factoryM->newModel("zombie"), shaderManager->getShader("light"));
+	zombie->way.addControlPoint(glm::vec3(-10.f, 0.f, -20.f));
+	zombie->way.addControlPoint(glm::vec3(20.f, 0.f, -10.f));
+	zombie->way.addControlPoint(glm::vec3(20.f, 0.f, 10.f));
+	zombie->way.addControlPoint(glm::vec3(-10.f, 0.f, 20.f));
 
 	Scene* sceneBall = new Scene(sceneCount);
 	sceneCount++;
@@ -240,9 +245,9 @@ void Engine::startRendering() {
 //Christmas scene
 	Scene* christmas = new Scene(sceneCount);
 	sceneCount++;
-	Object* plain2 = factoryO->newObject(factoryM->newModel("plain"), phongShader);
+	Object* plain2 = factoryO->newObject(factoryM->newModel("plain"), shaderManager->getShader("phong"));
 	Transformation::scale(plain2->getMatrix(), glm::vec3(10.0f, 10.0f, 10.0f));
-	Object* treeCH = factoryO->newObject(factoryM->newModel("tree"), lambertShader);
+	Object* treeCH = factoryO->newObject(factoryM->newModel("tree"), shaderManager->getShader("lambert"));
 
 	christmas->addCamera(camera);
 	christmas->addObject(plain2);
@@ -259,7 +264,7 @@ void Engine::startRendering() {
 		float randomZ = ((float)rand()) / (float)RAND_MAX;
 		float z = (randomZ * diff) + (-7);
 
-		gift = factoryO->newObject(factoryM->newModel("gift"), defaultShader);
+		gift = factoryO->newObject(factoryM->newModel("gift"), shaderManager->getShader("default"));
 		Transformation::translate(gift->getMatrix(), glm::vec3(x, 0.0f, z));
 		Transformation::scale(gift->getMatrix(), glm::vec3(2.0f, 2.0f, 2.0f));
 
@@ -397,14 +402,6 @@ void Engine::onClick(int button, int action, double x, double y)
 		glm::vec3 pos = glm::unProject(screenX, view, projection, viewPort);
 
 		printf("unProject [%f,%f,%f]\n", pos.x, pos.y, pos.z);
-		/*
-		if ((glfwGetKey(window->getGLFWWindow(), GLFW_KEY_C) == GLFW_PRESS) && index != 0) {
-			Object* toAdd = new Object(am->getModelByName("texturedTree1"), am->getShaderByName("lights"));
-			MatrixHandler::translate(toAdd->getMatRef(), glm::vec3(pos.x, pos.y, pos.z));
-			MatrixHandler::scale(toAdd->getMatRef(), glm::vec3(.5f, .5f, .5f));
-			this->currentScene->addObject(toAdd);
-
-		}*/
 		
 			Object* toAdd = new Object(modelManager->getModel("addingTree"),shaderManager->getShader("light"));
 			Transformation::translate(toAdd->getMatrix(), glm::vec3(pos.x, pos.y, pos.z));
