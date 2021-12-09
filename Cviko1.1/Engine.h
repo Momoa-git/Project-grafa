@@ -8,6 +8,7 @@
 #include "Window.h"
 #include "Scene.h"
 #include "ModelManager.h"
+#include "ShaderManager.h"
 
 class Engine {
 private:
@@ -15,6 +16,7 @@ private:
 	static Engine* instance;
 	std::vector <Scene*> vecScenes;
 	ModelManager* modelManager;
+	ShaderManager* shaderManager;
 	Engine();
 
 public:

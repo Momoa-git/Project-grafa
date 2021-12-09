@@ -15,9 +15,8 @@
 Engine* Engine::instance = 0;
 GLint objectCounter = 1;
 
-FactoryObject* factoryO = new FactoryObject();
-FactoryModel* factoryM = new FactoryModel();
-GLboolean camMove = false;
+//FactoryObject* factoryO = new FactoryObject();
+//FactoryModel* factoryM = new FactoryModel();
 
 
 Engine::Engine()
@@ -63,6 +62,7 @@ void Engine::startRendering() {
 	int sceneCount = 0;
 
 	this->modelManager = ModelManager::getInstance();
+	this->shaderManager = ShaderManager::getInstance();
 
 	Shader* defaultShader = new Shader("vertex_shader.vec", "fragment_shader.frag");
 	Shader* constShader = new Shader("vertex_shader_const.vec", "fragment_shader_const.frag");
@@ -72,13 +72,20 @@ void Engine::startRendering() {
 	Shader* textureShader = new Shader("vertex_shader_texture.vec", "fragment_shader_texture.frag");
 	Shader* lightShader = new Shader("vertex_shader_light.vec", "fragment_shader_light.frag");
 
-	this->shader = lightShader;
+	//this->shader = lightShader;
 
 	//Object* cube = new Object(new Model(Cube, 20 * (3 + 3), 6, 3, 2, GL_TRIANGLE_STRIP), phongShader);
-/*
-	FactoryObject* factoryO = new FactoryObject();
-	FactoryModel* factoryM = new FactoryModel();
-*/
+
+	
+
+
+
+	this->shaderManager->saveShader(defaultShader, "default");
+	this->shaderManager->saveShader(constShader, "const");
+	this->shaderManager->saveShader(phongShader, "phong");
+	this->shaderManager->saveShader(phongTextureShader, "phong-texture");
+	this->shaderManager->saveShader(textureShader, "texture");
+	this->shaderManager->saveShader(lightShader, "light");
 
 	Camera* camera = new Camera(window->getWidth(), window->getHeight(), glm::vec3(0.0f, 0.0f, 8.0f));
 	camera->registerObserver(defaultShader);
@@ -88,7 +95,11 @@ void Engine::startRendering() {
 	camera->registerObserver(phongTextureShader);
 	camera->registerObserver(textureShader);
 	camera->registerObserver(lightShader);
-	this->modelManager->saveShader(lightShader, "light");
+
+	
+	FactoryObject* factoryO = new FactoryObject();
+	FactoryModel* factoryM = new FactoryModel();
+
 
 	//Object* addingTree = factoryO->newObject(factoryM->newModel("addingTree"), shader);
 	modelManager->saveModel(factoryM->newModel("addingTree"), "addingTree");
@@ -97,64 +108,64 @@ void Engine::startRendering() {
 
 	SkyBox* skybox = new SkyBox(textureShader);
 	
-	Object* ball_R = factoryO->newObject(factoryM->newModel("sphere"), phongShader);
-	Object* ball_L = factoryO->newObject(factoryM->newModel("sphere"), phongShader);
-	Object* ball_U = factoryO->newObject(factoryM->newModel("sphere"), phongShader);
-	Object* ball_D = factoryO->newObject(factoryM->newModel("sphere"), phongShader);
+	Object* ball_R = factoryO->newObject(factoryM->newModel("sphere"), shaderManager->getShader("phong"));
+	Object* ball_L = factoryO->newObject(factoryM->newModel("sphere"), shaderManager->getShader("phong"));
+	Object* ball_U = factoryO->newObject(factoryM->newModel("sphere"), shaderManager->getShader("phong"));
+	Object* ball_D = factoryO->newObject(factoryM->newModel("sphere"), shaderManager->getShader("phong"));
 //	Object* monkey = new Object(new Model(suziSmooth, 2904 * (3 + 3), 6), phongShader);
 	//Object* test = factoryO->newObject(factoryM->newModel("plainTexture"), testShader);
 
 
 
 // SCENE FORREST
-	Object* plain = factoryO->newObject(factoryM->newModel("plainTexture"), phongTextureShader);
+	Object* plain = factoryO->newObject(factoryM->newModel("plainTexture"), shaderManager->getShader("phong-texture"));
 	Transformation::translate(plain->getMatrix(), glm::vec3(7.0f, 0.0f, -11.0f));
 	Transformation::scale(plain->getMatrix(), glm::vec3(20.0f, 10.0f, 20.0f));
 
-	Object* tree = factoryO->newObject(factoryM->newModel("tree"), phongShader);
+	Object* tree = factoryO->newObject(factoryM->newModel("tree"), shaderManager->getShader("phong"));
 	Transformation::translate(tree->getMatrix(), glm::vec3(3.0f, 0.0f, -7.0f));
 
-	Object* tree2 = factoryO->newObject(factoryM->newModel("tree"), phongShader);
+	Object* tree2 = factoryO->newObject(factoryM->newModel("tree"), shaderManager->getShader("phong"));
 	Transformation::translate(tree2->getMatrix(), glm::vec3(7.0f, 0.0f, -5.0f));
-	Object* tree3 = factoryO->newObject(factoryM->newModel("tree"), phongShader);
+	Object* tree3 = factoryO->newObject(factoryM->newModel("tree"), shaderManager->getShader("phong"));
 	Transformation::translate(tree3->getMatrix(), glm::vec3(6.0f, 0.0f, -10.0f));
-	Object* tree4 = factoryO->newObject(factoryM->newModel("tree"), phongShader);
+	Object* tree4 = factoryO->newObject(factoryM->newModel("tree"), shaderManager->getShader("phong"));
 	Transformation::translate(tree4->getMatrix(), glm::vec3(10.0f, 0.0f, -8.0f));
-	Object* tree5 = factoryO->newObject(factoryM->newModel("tree"), phongShader);
+	Object* tree5 = factoryO->newObject(factoryM->newModel("tree"), shaderManager->getShader("phong"));
 	Transformation::translate(tree5->getMatrix(), glm::vec3(5.0f, 0.0f, -13.0f));
-	Object* tree6 = factoryO->newObject(factoryM->newModel("tree"), phongShader);
+	Object* tree6 = factoryO->newObject(factoryM->newModel("tree"), shaderManager->getShader("phong"));
 	Transformation::translate(tree6->getMatrix(), glm::vec3(12.0f, 0.0f, -13.0f));
-	Object* tree7 = factoryO->newObject(factoryM->newModel("tree"), phongShader);
+	Object* tree7 = factoryO->newObject(factoryM->newModel("tree"), shaderManager->getShader("phong"));
 	Transformation::translate(tree7->getMatrix(), glm::vec3(8.0f, 0.0f, -2.0f));
-	Object* tree8 = factoryO->newObject(factoryM->newModel("tree"), phongShader);
+	Object* tree8 = factoryO->newObject(factoryM->newModel("tree"), shaderManager->getShader("phong"));
 	Transformation::translate(tree8->getMatrix(), glm::vec3(11.0f, 0.0f, -3.0f));
 
 
 
-	Object* bushes1 = factoryO->newObject(factoryM->newModel("bushes"), phongShader);
+	Object* bushes1 = factoryO->newObject(factoryM->newModel("bushes"), shaderManager->getShader("phong"));
 	Transformation::translate(bushes1->getMatrix(), glm::vec3(1.0f, 0.0f, -2.0f));
 	Transformation::scale(bushes1->getMatrix(), glm::vec3(1.0f, 1.0f, 1.0f));
-	Object* bushes2 = factoryO->newObject(factoryM->newModel("bushes"), phongShader);
+	Object* bushes2 = factoryO->newObject(factoryM->newModel("bushes"), shaderManager->getShader("phong"));
 	Transformation::translate(bushes2->getMatrix(), glm::vec3(0.4f, 0.0f, -2.5f));
-	Object* bushes3 = factoryO->newObject(factoryM->newModel("bushes"), phongShader);
+	Object* bushes3 = factoryO->newObject(factoryM->newModel("bushes"), shaderManager->getShader("phong"));
 	Transformation::translate(bushes3->getMatrix(), glm::vec3(1.4f, 0.0f, -1.6f));
-	Object* bushes4 = factoryO->newObject(factoryM->newModel("bushes"), phongShader);
+	Object* bushes4 = factoryO->newObject(factoryM->newModel("bushes"), shaderManager->getShader("phong"));
 	Transformation::translate(bushes4->getMatrix(), glm::vec3(0.4f, 0.0f, -1.7f));
-	Object* bushes5 = factoryO->newObject(factoryM->newModel("bushes"), phongShader);
+	Object* bushes5 = factoryO->newObject(factoryM->newModel("bushes"), shaderManager->getShader("phong"));
 	Transformation::translate(bushes5->getMatrix(), glm::vec3(1.3f, 0.0f, -2.4f));
-	Object* bushes6 = factoryO->newObject(factoryM->newModel("bushes"), phongShader);
+	Object* bushes6 = factoryO->newObject(factoryM->newModel("bushes"), shaderManager->getShader("phong"));
 	Transformation::translate(bushes6->getMatrix(), glm::vec3(0.6f, 0.0f, -1.5f));
 
 // LIGHTS SCENE
-	Object* plainLight = factoryO->newObject(factoryM->newModel("plainTexture"), lightShader);
+	Object* plainLight = factoryO->newObject(factoryM->newModel("plainTexture"), shaderManager->getShader("light"));
 	//Transformation::rotate(plainLight->getMatrix(), 0.02f, glm::vec3(1.0f, 0.0f, 0.0f));
 	Transformation::translate(plainLight->getMatrix(), glm::vec3(7.0f, 0.0f, -11.0f));
 	Transformation::scale(plainLight->getMatrix(), glm::vec3(20.0f, 10.0f, 20.0f));
     
 // BUILDING SCENE
-	Object* building = factoryO->newObject(factoryM->newModel("house"), lightShader);
-	Object* zombie = factoryO->newObject(factoryM->newModel("zombie"), lightShader);
-	Object* plainGrass = factoryO->newObject(factoryM->newModel("plainGrass"), lightShader);
+	Object* building = factoryO->newObject(factoryM->newModel("house"), shaderManager->getShader("light"));
+	Object* zombie = factoryO->newObject(factoryM->newModel("zombie"), shaderManager->getShader("light"));
+	Object* plainGrass = factoryO->newObject(factoryM->newModel("plainGrass"), shaderManager->getShader("light"));
 
 	Scene* sceneBall = new Scene(sceneCount);
 	sceneCount++;
@@ -357,15 +368,13 @@ void Engine::onClick(int button, int action, double x, double y)
 	}
 
 	if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_RIGHT) {
-		camMove = true;
 		glfwSetInputMode(window->getGLFWWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 	}
 	if (action == GLFW_RELEASE && button == GLFW_MOUSE_BUTTON_RIGHT) {
-		camMove = false;
 		glfwSetInputMode(window->getGLFWWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
 
-	if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_LEFT && !camMove)
+	if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_LEFT)
 	{
 		//read data from frame buffer
 		GLbyte color[4];
@@ -397,7 +406,7 @@ void Engine::onClick(int button, int action, double x, double y)
 
 		}*/
 		
-			Object* toAdd = new Object(modelManager->getModel("addingTree"),modelManager->getShader("light"));
+			Object* toAdd = new Object(modelManager->getModel("addingTree"),shaderManager->getShader("light"));
 			Transformation::translate(toAdd->getMatrix(), glm::vec3(pos.x, pos.y, pos.z));
 			Transformation::scale(toAdd->getMatrix(), glm::vec3(.3f, .3f, .3f));
 			this->scene->addObject(toAdd);

@@ -10,17 +10,17 @@
 #include "Model.h"
 #include "FactoryModel.h"
 
-class ModelManager
+class ShaderManager
 {
 private:
-	static ModelManager* instance;
-	std::vector<AssetDetail> models;
-	ModelManager();
-	
+	static ShaderManager* instance;
+	std::vector<AssetDetail> shaders;
+	ShaderManager();
 public:
-	static ModelManager* getInstance();
-	bool saveModel(Model* model, std::string name);
-	Model* getModel(std::string name);
+	static ShaderManager* getInstance();
+
+	bool saveShader(Shader* shader, std::string name);
+	Shader* getShader(std::string name);
 
 
 };

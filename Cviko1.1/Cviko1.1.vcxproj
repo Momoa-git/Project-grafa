@@ -143,6 +143,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderLoader.cpp" />
+    <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="Stb.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="ObserverSubject.h" />
+    <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="SkyBox.h" />
     <ClInclude Include="stb.h" />
     <ClInclude Include="Texture.h" />
