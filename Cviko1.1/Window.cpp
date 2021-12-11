@@ -1,6 +1,7 @@
 #include <stdexcept>
 #include "Window.h"
 #include "Engine.h"
+#include "Controller.h"
 
 Window::Window(int width1, int height1, const char* title) {
 	width = width1;
@@ -19,17 +20,23 @@ Window::Window(int width1, int height1, const char* title) {
 	
 	glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods) 
 		{
-		Engine::getInstance()->onKey(key, scancode, action, mods);
+		//Engine::getInstance()->onKey(key, scancode, action, mods);
+		Engine::getInstance()->getController()->onKey(key, scancode, action, mods);
+		
 		});
 	glfwSetCursorPosCallback(window, [](GLFWwindow* window, double x, double y) 
 		{
-		Engine::getInstance()->onMove(x, y);
+		//Engine::getInstance()->onMove(x, y);
+		Engine::getInstance()->getController()->onMove(x,y);
+		//Controller::getInstance()->onMove(x, y);
 		});
 	glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mods) 
 		{
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
-		Engine::getInstance()->onClick(button, action, xpos, ypos);
+		//Engine::getInstance()->onClick(button, action, xpos, ypos);
+		Engine::getInstance()->getController()->onClick(button, action, xpos, ypos);
+		//Controller::getInstance()->onClick(button, action, xpos, ypos);
 		});
 	
 	glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int w, int h) -> void {
@@ -37,7 +44,7 @@ Window::Window(int width1, int height1, const char* title) {
 		Window* win = (Window*)glfwGetWindowUserPointer(window);
 		win->width = w;
 		win->height = h;
-		Engine::getInstance()->scene->getCurrentCam()->calcProjection(w, h);
+		Engine::getInstance()->getScene()->getCurrentCam()->calcProjection(w, h);
 		});
 	
 	/*

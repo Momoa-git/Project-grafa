@@ -9,7 +9,6 @@
 #include "Model.h"
 #include "Way.h"
 #include "Transformation.h"
-#include "Drawable.h"
 
 class Object{
 protected:
@@ -26,7 +25,7 @@ public:
 	Object(Model* model, Shader* shader, GLint objectID = 0);
 
 	Shader* getShader();
-	void draw();
+	virtual void draw();
 	glm::mat4* getMatrix();
 	GLint getObjectID();
 

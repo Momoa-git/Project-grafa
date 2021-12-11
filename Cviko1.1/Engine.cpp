@@ -11,6 +11,7 @@
 #include "FactoryModel.h"
 #include "FactoryObject.h"
 #include "MovingObject.h"
+#include "Controller.h"
 
 
 Engine* Engine::instance = 0;
@@ -45,7 +46,7 @@ void Engine::init() {
 		throw std::runtime_error("failed to init glfw");
 		exit(EXIT_FAILURE);
 	}
-
+	controller = new Controller();
 	window = new Window(800, 600, "EngineInitiatedWindow");
 
 	printf("OpenGL Version: %s\n", glGetString(GL_VERSION));
@@ -167,10 +168,35 @@ void Engine::startRendering() {
 	Object* plainGrass = factoryO->newObject(factoryM->newModel("plainGrass"), shaderManager->getShader("light"));
 
 	MovingObject* zombie = new MovingObject(factoryM->newModel("zombie"), shaderManager->getShader("light"));
+	zombie->way.addControlPoint(glm::vec3(-20.f, 0.f, -10.f));
 	zombie->way.addControlPoint(glm::vec3(-10.f, 0.f, -20.f));
-	zombie->way.addControlPoint(glm::vec3(20.f, 0.f, -10.f));
-	zombie->way.addControlPoint(glm::vec3(20.f, 0.f, 10.f));
+	zombie->way.addControlPoint(glm::vec3(30.f, 0.f, -10.f));
+	zombie->way.addControlPoint(glm::vec3(60.f, 0.f, 0.f));
+	zombie->way.addControlPoint(glm::vec3(30.f, 0.f, 10.f));
 	zombie->way.addControlPoint(glm::vec3(-10.f, 0.f, 20.f));
+	zombie->way.addControlPoint(glm::vec3(-20.f, 0.f, 10.f));
+
+
+	Object* start = factoryO->newObject(factoryM->newModel("redSphere"), shaderManager->getShader("light"));
+	Transformation::translate(start->getMatrix(), glm::vec3(-20.0f, 0.0f, -10.0f));
+
+	Object* check1 = factoryO->newObject(factoryM->newModel("sphere"), shaderManager->getShader("phong"));
+	Transformation::translate(check1->getMatrix(), glm::vec3(-10.0f, 2.0f, -20.0f));
+
+	Object* check2 = factoryO->newObject(factoryM->newModel("sphere"), shaderManager->getShader("phong"));
+	Transformation::translate(check2->getMatrix(), glm::vec3(30.0f, 0.0f, -10.0f));
+
+	Object* check3 = factoryO->newObject(factoryM->newModel("sphere"), shaderManager->getShader("phong"));
+	Transformation::translate(check3->getMatrix(), glm::vec3(60.0f, 10.0f, 0.0f));
+
+	Object* check4 = factoryO->newObject(factoryM->newModel("sphere"), shaderManager->getShader("phong"));
+	Transformation::translate(check4->getMatrix(), glm::vec3(30.0f, 0.0f, 10.0f));
+
+	Object* check5 = factoryO->newObject(factoryM->newModel("sphere"), shaderManager->getShader("phong"));
+	Transformation::translate(check5->getMatrix(), glm::vec3(-10.0f, 0.0f, 20.0f));
+
+	Object* finish = factoryO->newObject(factoryM->newModel("redSphere"), shaderManager->getShader("light"));
+	Transformation::translate(finish->getMatrix(), glm::vec3(-20.0f, 0.0f, 10.0f));
 
 	Scene* sceneBall = new Scene(sceneCount);
 	sceneCount++;
@@ -237,6 +263,13 @@ void Engine::startRendering() {
 	houseScene->addObject(plainGrass);
 	houseScene->addObject(building);
 	houseScene->addObject(zombie);
+	houseScene->addObject(start);
+	houseScene->addObject(finish);
+	houseScene->addObject(check1);
+	houseScene->addObject(check2);
+	houseScene->addObject(check3);
+	houseScene->addObject(check4);
+	houseScene->addObject(check5);
 	houseScene->setSkybox(skybox);
 	houseScene->setDirLight(DirectionalLight(glm::vec3(.0f, -1.f, 1.f)));
 	vecScenes.push_back(houseScene);
@@ -309,9 +342,8 @@ void Engine::startRendering() {
 		//scene->getCurrentCam()->UpdateShader(shader->getShader());
 		scene->draw();
 
-		processHeldKeys();
 
-		
+		this->controller->processHeldKeys();
 
 		//Transformation::rotate(cube->getMatrix(), 0.02f, glm::vec3(1.0f, 1.0f, 0.0f));
 		//Transformation::rotate(cube2->getMatrix(), 0.01f, glm::vec3(0.0f, 1.0f, 1.0f));
@@ -363,121 +395,15 @@ void Engine::previousScene()
 	printf("change scene %d\n", prevScene);
 }
 
-void Engine::onClick(int button, int action, double x, double y) 
+
+Scene* Engine::getScene()
 {
-	if (action == GLFW_PRESS) {
-		printf("press %d %d %f %f\n", button, action, x, y);
-	}
-	if (action == GLFW_RELEASE) {
-		printf("release %d %d %f %f\n", button, action, x, y);
-	}
+	return this->scene;
 
-	if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_RIGHT) {
-		glfwSetInputMode(window->getGLFWWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-	}
-	if (action == GLFW_RELEASE && button == GLFW_MOUSE_BUTTON_RIGHT) {
-		glfwSetInputMode(window->getGLFWWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-	}
-
-	if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_LEFT)
-	{
-		//read data from frame buffer
-		GLbyte color[4];
-		GLfloat depth;
-		GLuint index; // identifikace telesa
-
-
-		int newy = window->getHeight() - y;
-
-		glReadPixels(x, newy, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, color);
-		glReadPixels(x, newy, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
-		glReadPixels(x, newy, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
-
-		printf("Clicked on pixel %d, %d, color %02hhx%02hhx%02hhx%02hhx, depth %f, stencil index %u\n",
-			x, y, color[0], color[1], color[2], color[3], depth, index);
-		glm::vec3 screenX = glm::vec3(x, newy, depth);
-		glm::mat4 view = this->scene->getCurrentCam()->viewMat;
-		glm::mat4 projection = this->scene->getCurrentCam()->projMat;
-		glm::vec4 viewPort = glm::vec4(0, 0, window->getWidth(), window->getHeight());
-		glm::vec3 pos = glm::unProject(screenX, view, projection, viewPort);
-
-		printf("unProject [%f,%f,%f]\n", pos.x, pos.y, pos.z);
-		
-			Object* toAdd = new Object(modelManager->getModel("addingTree"),shaderManager->getShader("light"));
-			Transformation::translate(toAdd->getMatrix(), glm::vec3(pos.x, pos.y, pos.z));
-			Transformation::scale(toAdd->getMatrix(), glm::vec3(.3f, .3f, .3f));
-			this->scene->addObject(toAdd);
-		
-	}
-
-
-	return;
 }
 
-void Engine::onKey(int key, int scancode, int action, int mods) 
+Controller* Engine::getController()
 {
-	if (action == GLFW_PRESS) {
-		printf("press %d %d %d %d\n", key, scancode, action, mods);
-	}
-	if (action == GLFW_RELEASE) {
-		printf("release %d %d %d %d\n", key, scancode, action, mods);
-	}
-	if (action == GLFW_PRESS && key == GLFW_KEY_RIGHT)
-		this->nextScene();
-
-	if (action == GLFW_PRESS && key == GLFW_KEY_LEFT)
-		this->previousScene();
-	return;
+	return this->controller;
 }
 
-
-
-void Engine::onMove(double x, double y) 
-{
-	printf("move %f %f \n", x, y);
-	double moveX, moveY;
-	moveX = x - (window->getWidth() / 2);
-	moveY = y - (window->getHeight() / 2);
-
-	glfwSetCursorPos(window->getGLFWWindow(), (window->getWidth() / 2), (window->getHeight() / 2));
-
-	
-	//this->forrest->getCurrentCam()->Rotate(xmove, ymove);
-	if (glfwGetMouseButton(window->getGLFWWindow(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
-	{
-		this->scene->getCurrentCam()->rotate(moveX, moveY);
-	}
-}
-
-
-void Engine::processHeldKeys()
-{
-
-	if (glfwGetKey(window->getGLFWWindow(), GLFW_KEY_W) == GLFW_PRESS)
-	{
-		scene->getCurrentCam()->move(CAM_FORWARD);
-	}
-	if (glfwGetKey(window->getGLFWWindow(), GLFW_KEY_A) == GLFW_PRESS)
-	{
-		scene->getCurrentCam()->move(CAM_LEFT);
-	}
-	if (glfwGetKey(window->getGLFWWindow(), GLFW_KEY_S) == GLFW_PRESS)
-	{
-		scene->getCurrentCam()->move(CAM_BACKWARD);
-	}
-	if (glfwGetKey(window->getGLFWWindow(), GLFW_KEY_D) == GLFW_PRESS)
-	{
-		scene->getCurrentCam()->move(CAM_RIGHT);
-	}
-	if (glfwGetKey(window->getGLFWWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-	{
-		scene->getCurrentCam()->move(CAM_UP);
-	}
-	if (glfwGetKey(window->getGLFWWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-	{
-		scene->getCurrentCam()->move(CAM_DOWN);
-	}
-	
-	
-	
-}

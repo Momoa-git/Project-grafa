@@ -8,7 +8,6 @@ Scene::Scene(int sceneCount)
 	//lightPosition = glm::vec3(0.0f, 0.0f, 0.0);
 	this->sceneCount = sceneCount;
 	this->dirLight = DirectionalLight();
-//	this->spotLight = SpotLight();
 	
 }
 
@@ -100,8 +99,6 @@ Camera* Scene::getCurrentCam()
 
 void Scene::addCamera(Camera* cam, GLboolean setCurrent) 
 {
-	cameras.push_back(cam);
-	if (setCurrent)
 		currentCam = cam;
 }
 void Scene::addObject(Object* obj) 
@@ -112,7 +109,6 @@ void Scene::addObject(Object* obj)
 void Scene::addPointLight(PointLight pl)
 {
 	pointLights.push_back(pl);
-
 
 }
 

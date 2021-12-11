@@ -11,8 +11,6 @@ class Scene
 private:
 	//objekty
 	std::vector <Object*> objects;
-	//camery
-	std::vector <Camera*> cameras;
 	//svetla
 	glm::vec3 lightPosition;
 	DirectionalLight dirLight;

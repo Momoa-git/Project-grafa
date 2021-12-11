@@ -28,7 +28,8 @@ Model::Model(GLboolean bit,const GLfloat* points, int size, int lineLen, int vec
 
 }
 
-Model::Model(const GLfloat* points, int pointNo, int lineLen) {
+Model::Model(const GLfloat* points, int pointNo, int lineLen) 
+{
 	this->texture = nullptr;
 	this->point = pointNo;
 	this->lineLen = lineLen;
@@ -38,7 +39,8 @@ Model::Model(const GLfloat* points, int pointNo, int lineLen) {
 	vao->BindBuffer();
 }
 
-Model::Model(const char* modelData) {
+Model::Model(const char* modelData) 
+{
 	this->texture = nullptr;
 	this->pointsType = GL_TRIANGLES;
 

@@ -17,10 +17,17 @@ Model* FactoryModel::newModel(string modelTitle)
 	if (modelTitle == "sphere")
 		//	return new Model(sphere, 2880 * (3 + 3), 6);
 		return Model::create(sphere, 2880, 6).positionAttrib(0).normalAttrib(3).build();
+	else if (modelTitle == "redSphere")
+	{
+		Model *model = Model::create(sphere, 2880, 6).positionAttrib(0).normalAttrib(3).build();
+		Texture* red = new Texture("./Texture/red.png", 0);
+		model->setTexture(red);
+		return model;
+	}
 
 	else if (modelTitle == "suziSmooth")
 		//return new Model(sphere, 2904 * (3 + 3), 6);
-	    return Model::create(sphere, 2880, 6).positionAttrib(0).normalAttrib(3).build();
+	    return Model::create(suziSmooth, 2904, 6).positionAttrib(0).normalAttrib(3).build();
 
 	else if (modelTitle == "plainTexture")
 	{
