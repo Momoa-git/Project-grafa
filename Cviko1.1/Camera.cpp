@@ -5,24 +5,23 @@
 Camera::Camera(int width, int height, glm::vec3 position)
 {
 	this->position = position;
-	bias = -90.0f;
-	pitch = 0.0f;
-	speed = 0.1f;
+	this->orientation = glm::vec3(0.0f, 0.0f, -1.0f);
+	this->Right = glm::vec3(0.0f, 1.0f, 0.0f);
+	this->Up = glm::vec3(0.0f, 1.0f, 0.0f);
+
+	this->bias = -90.0f;       //odchylka
+	this->pitch = 0.0f;
+	this->speed = 0.1f;        //movement speed
+	this->sensitivity = 0.04f; //citlivost
+
 	viewMat = glm::lookAt(position, position + orientation, WorldUp);
-	projMat = glm::perspective(glm::radians(45.0f), (float)width / height, 0.1f, 100.0f);
-	calcOrientation();
+	projMat = glm::perspective(glm::radians(45.0f), (float)width / height, 0.1f, 500.0f);
+	calcVectors();
 }
 
-void Camera::updateShader(GLuint shader) {
-	GLint idViewMat = glGetUniformLocation(shader, "viewMatrix");
-	GLint idProjMat = glGetUniformLocation(shader, "projectionMatrix");
-
-	glUniformMatrix4fv(idViewMat, 1, GL_FALSE, &viewMat[0][0]);
-	glUniformMatrix4fv(idProjMat, 1, GL_FALSE, &projMat[0][0]);
-
-}
 // pocitani smerovych vektoru kamery
-void Camera::calcOrientation() {
+void Camera::calcVectors() 
+{
 	glm::vec3 front;
 	front.x = cos(glm::radians(bias)) * cos(glm::radians(pitch));
 	front.y = sin(glm::radians(pitch));
@@ -32,40 +31,44 @@ void Camera::calcOrientation() {
 	Right = glm::normalize(glm::cross(orientation, WorldUp));
 	Up = glm::normalize(glm::cross(Right, orientation));
 } 
-void Camera::calcView() {
+void Camera::calcView()
+{
 	viewMat = glm::lookAt(position, position + orientation, WorldUp);
 	notify();
 }
-void Camera::move(Camera_Movement direction) {
+void Camera::calcMovement(Camera_Movement direction) 
+{
 	GLfloat velocity = speed;
 	printf("direction %d\n", direction);
 
-	switch (direction) {
-	case CAM_FORWARD:
-		position += orientation * velocity;
-		break;
-	case CAM_BACKWARD:
-		position -= orientation * velocity;
-		break;
-	case CAM_LEFT:
-		position -= Right * velocity;
-		break;
-	case CAM_RIGHT:
-		position += Right * velocity;
-		break;
-	case CAM_UP:
-		position += Up * velocity;
-		break;
-	case CAM_DOWN:
-		position -= Up * velocity;
-		break;
+	switch (direction) 
+	{
+		case CAMERA_FORWARD:
+			position += orientation * velocity;
+			break;
+		case CAMERA_BACKWARD:
+			position -= orientation * velocity;
+			break;
+		case CAMERA_LEFT:
+			position -= Right * velocity;
+			break;
+		case CAMERA_RIGHT:
+			position += Right * velocity;
+			break;
+		case CAMERA_UP:
+			position += Up * velocity;
+			break;
+		case CAMERA_DOWN:
+			position -= Up * velocity;
+			break;
 	}
 	calcView();
 }
 // otaceni mysis
-void Camera::rotate(double xoffset, double yoffset, GLboolean constrainPitch) {
-	bias += xoffset * sensitivity;
-	pitch -= yoffset * sensitivity;
+void Camera::rotateMouse(double xoffset, double yoffset, GLboolean constrainPitch) 
+{
+	this->bias += xoffset * this->sensitivity;
+	this->pitch -= yoffset * this->sensitivity;
 
 	// make sure that when pitch is out of bounds, screen doesn't get flipped
 	if (constrainPitch)
@@ -75,7 +78,7 @@ void Camera::rotate(double xoffset, double yoffset, GLboolean constrainPitch) {
 		if (pitch < -89.0f)
 			pitch = -89.0f;
 	}
-	calcOrientation();
+	calcVectors();
 	calcView();
 }
 

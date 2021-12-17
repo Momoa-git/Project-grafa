@@ -10,10 +10,10 @@ class SkyBox : public ObserverSkyBox
 private:
 	Object sides[6];
 	glm::vec3 position;
-	bool initialised;
 
 public:
-	SkyBox(Shader* shader);
+	SkyBox(Shader* shader, int version);
+	void setObjects(Model* bottom, Model* top, Model* left, Model* right, Model* front, Model* back, Shader* shader);
 	void draw();
 	virtual void update(glm::vec3 position) override;
 

@@ -1,6 +1,6 @@
 ﻿#include "Model.h"
 #include <vector>
-
+/*
 Model::Model(GLboolean bit,const GLfloat* points, int size, int lineLen, int vecLen, int uniformCount, GLenum pointsType)
 {
 	
@@ -26,7 +26,7 @@ Model::Model(GLboolean bit,const GLfloat* points, int size, int lineLen, int vec
 	vao->ResetBindBuffer();
 	vbo->ResetBindBuffer();
 
-}
+}*/
 
 Model::Model(const GLfloat* points, int pointNo, int lineLen) 
 {
@@ -108,7 +108,8 @@ void Model::setTexture(Texture* texture)
 	this->texture = texture;
 }
 
-BuilderModel Model::create(const GLfloat* points, GLint pointNo, GLint lineLen) {
+BuilderModel Model::create(const GLfloat* points, GLint pointNo, GLint lineLen) 
+{
 	return BuilderModel(points, pointNo, lineLen);
 }
 

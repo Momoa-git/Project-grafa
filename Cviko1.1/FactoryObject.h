@@ -14,6 +14,7 @@ public:
 	
 	FactoryObject();
 	Object* newObject(Model* model, Shader* shader);
+	Object* newObjectWithID(Model* model, Shader* shader, GLint objectID);
 
 
 

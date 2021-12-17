@@ -45,6 +45,7 @@ void Object::draww()
 	glDrawArrays(model->getpointsType(), 0, model->getPointsLen());
 }
 */
+
 Shader* Object::getShader()
 {
 	return this->shader;

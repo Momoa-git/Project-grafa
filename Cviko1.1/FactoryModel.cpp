@@ -25,6 +25,18 @@ Model* FactoryModel::newModel(string modelTitle)
 		return model;
 	}
 
+	else if (modelTitle == "earth")
+	{
+		//	Model* model = new Model(plain_texture, 6 * (3 + 3 + 2), 6);
+
+		Model* model = Model::create("./Models/Earth.obj").positionAttrib(0).normalAttrib(3).texAttrib(6).build();
+
+		Texture* earth = new Texture("./Texture/planet.png", 0);
+		model->setTexture(earth);
+
+		return model;
+	}
+
 	else if (modelTitle == "suziSmooth")
 		//return new Model(sphere, 2904 * (3 + 3), 6);
 	    return Model::create(suziSmooth, 2904, 6).positionAttrib(0).normalAttrib(3).build();
@@ -88,7 +100,7 @@ Model* FactoryModel::newModel(string modelTitle)
 
 		return model;
 	}
-
+	
 
 	else if (modelTitle == "tree")
 		//return new Model(tree_plain, 92814 * (3 + 3), 6);

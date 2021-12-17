@@ -3,8 +3,8 @@
 
 Scene::Scene(int sceneCount)
 {
-	currentCam = nullptr;
-	skybox = nullptr;
+	this->camera = nullptr;
+	this->skybox = nullptr;
 	//lightPosition = glm::vec3(0.0f, 0.0f, 0.0);
 	this->sceneCount = sceneCount;
 	this->dirLight = DirectionalLight();
@@ -92,14 +92,14 @@ void Scene::draw()
 
 	}
 }
-Camera* Scene::getCurrentCam()
+Camera* Scene::getCamera()
 {
-	return this->currentCam;
+	return this->camera;
 }
 
 void Scene::addCamera(Camera* cam, GLboolean setCurrent) 
 {
-		currentCam = cam;
+		this->camera = cam;
 }
 void Scene::addObject(Object* obj) 
 {
@@ -128,6 +128,6 @@ void Scene::setDirLight(DirectionalLight dr)
 void Scene::setSkybox(SkyBox* skybox)
 {
 	this->skybox = skybox;
-	this->currentCam->registerObserver(this->skybox);
+	this->camera->registerObserver(this->skybox);
 
 }

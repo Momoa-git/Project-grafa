@@ -1,6 +1,6 @@
 #include "DirectionalLight.h"
 DirectionalLight::DirectionalLight() :LightBase() {
-	//this->direction = glm::vec3(.0f, -1.f, 1.f);
+	
 }
 DirectionalLight::DirectionalLight(glm::vec3 direction) : direction(direction) {
 

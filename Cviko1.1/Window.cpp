@@ -44,7 +44,7 @@ Window::Window(int width1, int height1, const char* title) {
 		Window* win = (Window*)glfwGetWindowUserPointer(window);
 		win->width = w;
 		win->height = h;
-		Engine::getInstance()->getScene()->getCurrentCam()->calcProjection(w, h);
+		Engine::getInstance()->getScene()->getCamera()->calcProjection(w, h);
 		});
 	
 	/*

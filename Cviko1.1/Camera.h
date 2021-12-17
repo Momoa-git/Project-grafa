@@ -12,12 +12,12 @@
 const glm::vec3 WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 enum Camera_Movement {
-	CAM_FORWARD,
-	CAM_BACKWARD,
-	CAM_LEFT,
-	CAM_RIGHT,
-	CAM_UP,
-	CAM_DOWN
+	CAMERA_LEFT,
+	CAMERA_RIGHT,
+	CAMERA_UP,
+	CAMERA_DOWN,
+	CAMERA_FORWARD,
+	CAMERA_BACKWARD,
 };
 
 class Camera : public ObserverSubject
@@ -25,25 +25,28 @@ class Camera : public ObserverSubject
 public:
 	std::vector<Observer*> observers;
 	std::vector<ObserverSkyBox*> observersSky;
+
 	glm::vec3 position;
-	glm::vec3 orientation = glm::vec3(0.0f, 0.0f, -1.0f);
-	glm::vec3 Right = glm::vec3(0.0f, 1.0f, 0.0f);
-	glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::vec3 orientation;
+	glm::vec3 Right;
+	glm::vec3 Up;
+
 	glm::mat4 viewMat;
 	glm::mat4 projMat;
+
 	GLfloat speed;
-	GLfloat sensitivity = 0.04f;
+	GLfloat sensitivity;
 	GLfloat pitch;
 	GLfloat bias;
 
 	// Camera constructor to set up initial values
 	Camera(int width, int height, glm::vec3 position);
 
-	void updateShader(GLuint shader);
-	void calcOrientation();
+	//void updateShader(GLuint shader);
+	void calcVectors();
 	void calcView();
-	void move(Camera_Movement direction);
-	void rotate(double xoffset, double yoffset, GLboolean constrainPitch = true);
+	void calcMovement(Camera_Movement direction);
+	void rotateMouse(double xoffset, double yoffset, GLboolean constrainPitch = true);
 	void calcProjection(int width, int height);
 
 	virtual void registerObserver(Observer* observer) override;

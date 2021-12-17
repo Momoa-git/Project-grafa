@@ -17,19 +17,19 @@ private:
 	std::vector <SpotLight> spotLights;
 	std::vector <PointLight> pointLights;
 
-	Camera* currentCam;
+	Camera* camera;
 	SkyBox* skybox;
 public:
 	int sceneCount;
 	Scene(int sceneCount);
 	void draw();
-	Camera* getCurrentCam();
+	Camera* getCamera();
 	void addCamera(Camera* cam, GLboolean setCurrent = true);
 	void addObject(Object* obj);
 	void addPointLight(PointLight);
 	void setLightPosition(glm::vec3 lightPosition);
 	void setDirLight(DirectionalLight dirLight);
-	//void setSpotLight(SpotLight spotLight);
+	
 	void addSpotLight(SpotLight);
 	void setSkybox(SkyBox* skybox);
 

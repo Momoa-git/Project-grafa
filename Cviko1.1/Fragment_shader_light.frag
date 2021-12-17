@@ -87,7 +87,7 @@ vec3 CalculateDirLight(DirLight light, vec3 normal, vec3 viewDir)
     // combine results
     vec3 ambient  = light.ambient;
     vec3 diffuse  = light.diffuse  * dot_product;
-    vec3 specular = light.specular * spec;
+    vec3 specular = light.specular * spec * 0.5;
     return (vec3(texture(textureUnitID, ex_uv)) * ((ambient) + (diffuse)) + (specular));
 }  
 
@@ -108,10 +108,11 @@ vec3 CalculateSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir
     float epsilon = light.cutOff - light.outerCutOff;
     float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
     // combine results
-    vec3 ambient  = light.ambient;
+	vec3 baseColor = vec3(1.0f, 0.0f, 0.0f);
+    vec3 ambient  = light.ambient * 0.5f;
     vec3 diffuse  = light.diffuse  * dot_product;
     vec3 specular = light.specular * spec;
-    return (ambient + diffuse + specular) * attenuation * intensity;
+    return (baseColor + ambient + diffuse + specular) * attenuation * intensity;
 }
 
 void main()

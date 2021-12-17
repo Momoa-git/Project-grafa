@@ -110,7 +110,7 @@ void Engine::startRendering() {
 
 // SCENE BALL
 
-	SkyBox* skybox = new SkyBox(shaderManager->getShader("texture"));
+	SkyBox* skybox = new SkyBox(shaderManager->getShader("texture"), 1);
 	
 	Object* ball_R = factoryO->newObject(factoryM->newModel("sphere"), shaderManager->getShader("phong"));
 	Object* ball_L = factoryO->newObject(factoryM->newModel("sphere"), shaderManager->getShader("phong"));
@@ -164,8 +164,10 @@ void Engine::startRendering() {
 	Transformation::scale(plainLight->getMatrix(), glm::vec3(20.0f, 10.0f, 20.0f));
     
 // BUILDING SCENE
+	GLint objectID = 1;
 	Object* building = factoryO->newObject(factoryM->newModel("house"), shaderManager->getShader("light"));
-	Object* plainGrass = factoryO->newObject(factoryM->newModel("plainGrass"), shaderManager->getShader("light"));
+	Object* plainGrass = factoryO->newObjectWithID(factoryM->newModel("plainGrass"), shaderManager->getShader("light"), objectID);
+	//index = getIndex();
 
 	MovingObject* zombie = new MovingObject(factoryM->newModel("zombie"), shaderManager->getShader("light"));
 	zombie->way.addControlPoint(glm::vec3(-20.f, 0.f, -10.f));
@@ -175,7 +177,6 @@ void Engine::startRendering() {
 	zombie->way.addControlPoint(glm::vec3(30.f, 0.f, 10.f));
 	zombie->way.addControlPoint(glm::vec3(-10.f, 0.f, 20.f));
 	zombie->way.addControlPoint(glm::vec3(-20.f, 0.f, 10.f));
-
 
 	Object* start = factoryO->newObject(factoryM->newModel("redSphere"), shaderManager->getShader("light"));
 	Transformation::translate(start->getMatrix(), glm::vec3(-20.0f, 0.0f, -10.0f));
@@ -197,6 +198,10 @@ void Engine::startRendering() {
 
 	Object* finish = factoryO->newObject(factoryM->newModel("redSphere"), shaderManager->getShader("light"));
 	Transformation::translate(finish->getMatrix(), glm::vec3(-20.0f, 0.0f, 10.0f));
+// SPACE SCENE
+	SkyBox* skybox_space = new SkyBox(shaderManager->getShader("texture"), 2);
+	Object* planet_earth = factoryO->newObject(factoryM->newModel("earth"), shaderManager->getShader("light"));
+
 
 	Scene* sceneBall = new Scene(sceneCount);
 	sceneCount++;
@@ -274,6 +279,14 @@ void Engine::startRendering() {
 	houseScene->setDirLight(DirectionalLight(glm::vec3(.0f, -1.f, 1.f)));
 	vecScenes.push_back(houseScene);
 
+//Space scene
+	Scene* spaceScene = new Scene(sceneCount);
+	sceneCount++;
+	spaceScene->addCamera(camera);
+	spaceScene->setSkybox(skybox_space);
+	spaceScene->addPointLight(PointLight(glm::vec3(0.0f, 10.0f, 0.0)));
+	spaceScene->addObject(planet_earth);
+	vecScenes.push_back(spaceScene);
 
 //Christmas scene
 	Scene* christmas = new Scene(sceneCount);
@@ -330,7 +343,7 @@ void Engine::startRendering() {
 	glEnable(GL_STENCIL_TEST);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-	scene->getCurrentCam()->notify();
+	scene->getCamera()->notify();
 	while (!glfwWindowShouldClose(this->window->getGLFWWindow())) 
 	{
 	
@@ -344,11 +357,13 @@ void Engine::startRendering() {
 
 
 		this->controller->processHeldKeys();
+		
 
 		//Transformation::rotate(cube->getMatrix(), 0.02f, glm::vec3(1.0f, 1.0f, 0.0f));
 		//Transformation::rotate(cube2->getMatrix(), 0.01f, glm::vec3(0.0f, 1.0f, 1.0f));
 		//Transformation::rotate(ball_R->getMatrix(), 0.01f, glm::vec3(0.0f, 1.0f, 1.0f));
-		//Transformation::rotate(monkey->getMatrix(), 0.04f, glm::vec3(0.0f, 1.0f, 0.0f));
+		Transformation::rotate(treeCH->getMatrix(), 0.04f, glm::vec3(0.0f, 1.0f, 0.0f));
+		Transformation::rotate(planet_earth->getMatrix(), 0.009f, glm::vec3(0.0f, 1.0f, 0.0f));
 
 			
 	// update other events like input handling

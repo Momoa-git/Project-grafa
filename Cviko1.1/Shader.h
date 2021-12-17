@@ -23,7 +23,6 @@ private:
 public:
 	Shader(const char* vertex_shader, const char* fragment_shader);
 	
-	GLuint getShader();  
 	void drawShader();
 	GLint getUniform(const char* name);
 

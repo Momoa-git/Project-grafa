@@ -38,18 +38,20 @@ void Controller::onClick(int button, int action, double x, double y)
 		printf("Clicked on pixel %d, %d, color %02hhx%02hhx%02hhx%02hhx, depth %f, stencil index %u\n",
 			x, y, color[0], color[1], color[2], color[3], depth, index);
 		glm::vec3 screenX = glm::vec3(x, newy, depth);
-		glm::mat4 view = Engine::getInstance()->getScene()->getCurrentCam()->viewMat;
-		glm::mat4 projection = Engine::getInstance()->getScene()->getCurrentCam()->projMat;
+		glm::mat4 view = Engine::getInstance()->getScene()->getCamera()->viewMat;
+		glm::mat4 projection = Engine::getInstance()->getScene()->getCamera()->projMat;
 		glm::vec4 viewPort = glm::vec4(0, 0, Engine::getInstance()->getWindow()->getWidth(), Engine::getInstance()->getWindow()->getHeight());
 		glm::vec3 pos = glm::unProject(screenX, view, projection, viewPort);
 
 		printf("unProject [%f,%f,%f]\n", pos.x, pos.y, pos.z);
-		
-		
-		Object* toAdd = new Object(Engine::getInstance()->modelManager->getModel("addingTree"), Engine::getInstance()->shaderManager->getShader("light"));
-		Transformation::translate(toAdd->getMatrix(), glm::vec3(pos.x, pos.y, pos.z));
-		Transformation::scale(toAdd->getMatrix(), glm::vec3(.3f, .3f, .3f));
-		Engine::getInstance()->getScene()->addObject(toAdd);
+
+		if (index != 0)
+		{
+			Object* toAdd = new Object(Engine::getInstance()->modelManager->getModel("addingTree"), Engine::getInstance()->shaderManager->getShader("light"));
+			Transformation::translate(toAdd->getMatrix(), glm::vec3(pos.x, pos.y, pos.z));
+			Transformation::scale(toAdd->getMatrix(), glm::vec3(.3f, .3f, .3f));
+			Engine::getInstance()->getScene()->addObject(toAdd);
+		}
 
 	}
 
@@ -70,6 +72,13 @@ void Controller::onKey(int key, int scancode, int action, int mods)
 
 	if (action == GLFW_PRESS && key == GLFW_KEY_LEFT)
 		Engine::getInstance()->previousScene();
+/*
+	if (action == GLFW_REPEAT)
+	{
+		if (key == GLFW_KEY_W)
+			Engine::getInstance()->getScene()->getCamera()->calcMovement(CAMERA_FORWARD);
+	}*/
+
 	return;
 }
 
@@ -88,7 +97,7 @@ void Controller::onMove(double x, double y)
 	//this->forrest->getCurrentCam()->Rotate(xmove, ymove);
 	if (glfwGetMouseButton(Engine::getInstance()->getWindow()->getGLFWWindow(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
 	{
-		Engine::getInstance()->getScene()->getCurrentCam()->rotate(moveX, moveY);
+		Engine::getInstance()->getScene()->getCamera()->rotateMouse(moveX, moveY);
 	}
 }
 
@@ -98,27 +107,27 @@ void Controller::processHeldKeys()
 
 	if (glfwGetKey(Engine::getInstance()->getWindow()->getGLFWWindow(), GLFW_KEY_W) == GLFW_PRESS)
 	{
-		Engine::getInstance()->getScene()->getCurrentCam()->move(CAM_FORWARD);
+		Engine::getInstance()->getScene()->getCamera()->calcMovement(CAMERA_FORWARD);
 	}
 	if (glfwGetKey(Engine::getInstance()->getWindow()->getGLFWWindow(), GLFW_KEY_A) == GLFW_PRESS)
 	{
-		Engine::getInstance()->getScene()->getCurrentCam()->move(CAM_LEFT);
+		Engine::getInstance()->getScene()->getCamera()->calcMovement(CAMERA_LEFT);
 	}
 	if (glfwGetKey(Engine::getInstance()->getWindow()->getGLFWWindow(), GLFW_KEY_S) == GLFW_PRESS)
 	{
-		Engine::getInstance()->getScene()->getCurrentCam()->move(CAM_BACKWARD);
+		Engine::getInstance()->getScene()->getCamera()->calcMovement(CAMERA_BACKWARD);
 	}
 	if (glfwGetKey(Engine::getInstance()->getWindow()->getGLFWWindow(), GLFW_KEY_D) == GLFW_PRESS)
 	{
-		Engine::getInstance()->getScene()->getCurrentCam()->move(CAM_RIGHT);
+		Engine::getInstance()->getScene()->getCamera()->calcMovement(CAMERA_RIGHT);
 	}
 	if (glfwGetKey(Engine::getInstance()->getWindow()->getGLFWWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 	{
-		Engine::getInstance()->getScene()->getCurrentCam()->move(CAM_UP);
+		Engine::getInstance()->getScene()->getCamera()->calcMovement(CAMERA_UP);
 	}
 	if (glfwGetKey(Engine::getInstance()->getWindow()->getGLFWWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
 	{
-		Engine::getInstance()->getScene()->getCurrentCam()->move(CAM_DOWN);
+		Engine::getInstance()->getScene()->getCamera()->calcMovement(CAMERA_DOWN);
 	}
 
 }

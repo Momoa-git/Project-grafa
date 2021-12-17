@@ -25,6 +25,7 @@ private:
 public:
 	ModelManager* modelManager;
 	ShaderManager* shaderManager;
+	int index = 0;
 
 	void init();
 

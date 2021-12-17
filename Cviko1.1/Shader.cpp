@@ -19,12 +19,12 @@ void Shader::drawShader()
 	glUniformMatrix4fv(idProjMat, 1, GL_FALSE, &projMat[0][0]);
 	glUniform3fv(idCamPos, 1, glm::value_ptr(this->cameraPos));
 }
-
+/*
 GLuint Shader::getShader()
 {
 	return shader;
 
-}
+}*/
 GLint Shader::getUniform(const char* name)
 {
 	return glGetUniformLocation(shader, name);
