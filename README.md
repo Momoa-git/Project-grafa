@@ -1,5 +1,5 @@
 # Project-grafa
-Project of subject ZPG (Základy počítačové grafiky) - OpenGL library. 
+Project of course ZPG (Základy počítačové grafiky) - OpenGL library. 
 
 **Project contains:** 
 - Transformation (rotation, scale, translation)
